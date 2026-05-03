@@ -1,0 +1,1 @@
+export const FILE_TYPE_PACKAGE = 'FILE_TYPE_MODULE';

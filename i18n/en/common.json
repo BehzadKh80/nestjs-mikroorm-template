@@ -1,0 +1,22 @@
+{
+  "exceptions": {
+    "DuplicationException": {
+      "message": "An account with this {field} already exists.",
+      "field": "{field}"
+    },
+    "EntityNotFound": {
+      "message": "This {entity} doesn't exist or may have been removed."
+    },
+    "NonExistentEntity": {
+      "message": "Cannot link to non-existent {entity}."
+    }
+  },
+  "responses": {
+    "EntityDeleted": {
+      "message": "You've permanently removed {entity}. This action cannot be undone."
+    },
+    "EntityUpdated": {
+      "message": "Your updates to {entity} have been successfully applied."
+    }
+  }
+}
