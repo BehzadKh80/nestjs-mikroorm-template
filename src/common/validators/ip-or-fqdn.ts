@@ -4,6 +4,7 @@ import {
   ValidationArguments,
   isFQDN,
   isIP,
+  Validate,
 } from 'class-validator';
 
 @ValidatorConstraint({ name: 'ipOrFqdn', async: false })
@@ -16,3 +17,5 @@ export class IpOrFqdn implements ValidatorConstraintInterface {
     return 'Text ($value) is not FQDN or IP!';
   }
 }
+
+export const IsIpOrFqdn = () => Validate(IpOrFqdn);

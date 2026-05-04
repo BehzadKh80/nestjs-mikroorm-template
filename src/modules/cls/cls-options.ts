@@ -1,6 +1,6 @@
 import { ClsModuleAsyncOptions } from 'nestjs-cls';
 import { Request } from 'express';
-import { randomUUID } from 'crypto';
+import { v7 } from 'uuid';
 
 export const clsOptions: ClsModuleAsyncOptions = {
   useFactory: () => {
@@ -8,11 +8,17 @@ export const clsOptions: ClsModuleAsyncOptions = {
       middleware: {
         mount: true,
         setup: (cls, req: Request) => {
-          const requestId = req.headers['x-request-id'] ?? randomUUID();
+          let requestId: string | undefined = req.res?.getHeader(
+            'x-request-id',
+          ) as unknown as string | undefined;
+          if (!requestId) {
+            requestId = v7();
+            req.res?.setHeader('x-request-id', requestId);
+          }
           cls.set('requestId', requestId);
-          req.res?.setHeader('x-request-id', requestId);
         },
       },
     };
   },
+  global: true,
 };

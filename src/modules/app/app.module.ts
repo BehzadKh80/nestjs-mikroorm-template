@@ -21,6 +21,7 @@ import { HashModule } from '../hash/hash.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ormModuleConfig } from '../orm/orm-module-config';
 import { HealthModule } from '../health/health.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -34,6 +35,8 @@ import { HealthModule } from '../health/health.module';
     MikroOrmModule.forRootAsync(ormModuleConfig),
     HealthModule,
     HashModule,
+
+    UserModule,
   ],
 })
 export class AppModule {}

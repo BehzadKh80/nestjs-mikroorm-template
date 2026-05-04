@@ -1,28 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import { UserRepository } from './repositories/user.repository';
+import { EntityManager } from '@mikro-orm/postgresql';
+import { ClsService } from 'nestjs-cls';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    console.log(createUserDto);
-    return 'This action adds a new user';
+  constructor(
+    @InjectPinoLogger(UserService.name)
+    private readonly logger: PinoLogger,
+    private readonly clsService: ClsService,
+    private readonly em: EntityManager,
+    private readonly userRepository: UserRepository,
+  ) {}
+
+  async create(createUserDto: CreateUserDto) {
+    let exist = await this.userRepository.findOne({
+      email: createUserDto.email,
+    });
+    if (exist) {
+      this.logger.warn(
+        {
+          requestId: this.clsService.get('requestId'),
+        },
+        'some user exists',
+      );
+      throw new NotAcceptableException('user is exists');
+    }
+    let newUser = this.userRepository.create(createUserDto);
+    await this.em.flush();
+    return newUser;
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    return this.userRepository.findOne(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: string, updateUserDto: UpdateUserDto) {
     console.log(updateUserDto);
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 }

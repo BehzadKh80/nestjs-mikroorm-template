@@ -3,12 +3,8 @@ import {
   DATABASE_CONFIG_PROVIDER,
   DatabaseConfigType,
 } from '../config/resources/database-resource';
-import {
-  EntityCaseNamingStrategy,
-  Options,
-  PostgreSqlDriver,
-} from '@mikro-orm/postgresql';
-import { Logger } from '@nestjs/common';
+import { Options, PostgreSqlDriver } from '@mikro-orm/postgresql';
+// import { Logger } from '@nestjs/common';
 import { NodeEnv } from '../../common/enums/node-env.enum';
 import {
   NODE_CONFIG_PROVIDER,
@@ -24,7 +20,6 @@ export function createConfig(common: {
   name: string;
   schema?: string | undefined | null;
   nodeEnv: NodeEnv;
-  logger?: (message: string) => void | undefined | null;
 }): Options {
   const options: Options = {
     // ── Driver ───────────────────────────────────────────────
@@ -37,7 +32,6 @@ export function createConfig(common: {
     password: common.password ?? '',
     dbName: common.name,
     schema: common.schema ?? 'public',
-
     // SSL is mandatory for production database connections.
     // For cloud providers (AWS RDS, GCP Cloud SQL, etc.) use `rejectUnauthorized: true`
     // with the correct CA certificate if needed. In development you can set to false.
@@ -91,7 +85,7 @@ export function createConfig(common: {
       path: './dist/modules/orm/migrations', // path to compiled migration files in production
       pathTs: './src/modules/orm/migrations', // path to TypeScript migration files (dev)
       // glob: '!(*.d).{js,ts}', // files to match
-      // transactional: true, // wrap each migration in a transaction
+      transactional: true, // wrap each migration in a transaction
       // disableForeignKeys: true, // drop FK constraints during migration (safer for Postgres)
       // allOrNothing: true, // make migrations atomic (Postgres only)
       // dropTables: false, // never drop tables automatically
@@ -118,13 +112,11 @@ export function createConfig(common: {
     // strict: true,
 
     // Use snake_case for database columns (if your schema follows that convention)
-    namingStrategy: EntityCaseNamingStrategy,
+    // namingStrategy: EntityCaseNamingStrategy,
 
     extensions: [Migrator],
+    allowGlobalContext: Boolean(process.env['ORM_GLOBAL_CONTEXT']) ?? false,
   };
-  if (common.logger) {
-    options.logger = common.logger;
-  }
 
   return options;
 }
@@ -134,7 +126,6 @@ export const ormModuleConfig: MikroOrmModuleAsyncOptions = {
     databaseConfig: DatabaseConfigType,
     nodeConfig: NodeConfigType,
   ) => {
-    const logger = new Logger('MikroOrm');
     return {
       ...createConfig({
         host: databaseConfig.host,
@@ -144,7 +135,6 @@ export const ormModuleConfig: MikroOrmModuleAsyncOptions = {
         name: databaseConfig.name,
         schema: databaseConfig.schema,
         nodeEnv: nodeConfig.env,
-        logger: logger.log,
       }),
       autoLoadEntities: true,
     };

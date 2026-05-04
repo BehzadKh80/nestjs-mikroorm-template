@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { capitalCase } from 'change-case';
@@ -21,7 +21,6 @@ import helmet from 'helmet';
 // import { RedisStore } from 'connect-redis';
 import { existsSync, mkdirSync } from 'fs';
 import { STATIC_DIRECTORY } from './common/constants';
-// import { nanoid } from 'nanoid';
 // import { RedisStore } from './common/redis-store';
 // import { RedisStore } from 'connect-redis';
 // import { doubleCsrf } from 'csrf-csrf';
@@ -57,7 +56,7 @@ async function bootstrap() {
   app.useLogger(logger);
 
   // const redisClient: RedisClientType = app.get(REDIS_CLIENT);
-
+  // app.flushLogs();
   // await app.register(fastifyHelmet);
   app.use(
     helmet({
@@ -88,6 +87,40 @@ async function bootstrap() {
   if (appConfig.enableGloablPrefix) {
     app.setGlobalPrefix(appConfig.globalPrefix);
   }
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // ---- Security & Sanitization ----
+      whitelist: true, // Strip properties that are not in the DTO
+      forbidNonWhitelisted: true, // Throw an error if extra properties are sent
+      forbidUnknownValues: true, // Reject objects without validation decorators
+
+      // ---- Transformation ----
+      transform: true, // Automatically transform payloads to DTO instances
+      transformOptions: {
+        enableImplicitConversion: true, // e.g., string "1" → number 1 in DTO typed as number
+      },
+
+      // ---- Performance & Error Handling ----
+      stopAtFirstError: true, // Stop after the first validation error (saves CPU)
+      validationError: {
+        target: false, // Do not expose the full object in validation errors
+        value: false, // Do not expose input values in validation errors
+      },
+
+      // ---- Custom Error Messages (Production) ----
+      // Replace detailed field errors with a generic message, while logging internally
+      // exceptionFactory: (errors: ValidationError[]) => {
+      //   // Log the full validation errors (never include in the response)
+      //   console.error(
+      //     'Validation errors:',
+      //     JSON.stringify(errors, undefined, 2),
+      //   );
+
+      //   // Return a single generic BadRequestException (safe for production)
+      //   //return new BadRequestException('Invalid request data');
+      // },
+    }),
+  );
 
   // const fastify = app.getHttpAdapter().getInstance();
   // fastify.decorateRequest('logOut', logOut);
