@@ -2,9 +2,9 @@
   "name": "nestjs-mikroorm-template",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Behzad Khalifeh",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
