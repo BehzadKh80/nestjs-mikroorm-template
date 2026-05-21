@@ -1,0 +1,14 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { {{pascalCase name}} } from '../entities/{{kebabCase name}}.entity';
+import { CreatedResponse } from '../../../common/responses/created.response';
+
+export type Create{{pascalCase name}}Data = {{pascalCase name}};
+export class Create{{pascalCase name}}Response extends CreatedResponse {
+  @ApiProperty({ type: () => {{pascalCase name}} })
+  public readonly data!: Create{{pascalCase name}}Data;
+
+  constructor(data: Create{{pascalCase name}}Data) {
+    super();
+    this.data = data;
+  }
+}

@@ -1,0 +1,28 @@
+import { Module } from '@nestjs/common';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+
+// <import />
+import { {{pascalCase name}} } from './entities/{{kebabCase name}}.entity';
+import { {{pascalCase name}}Service } from './services/{{kebabCase name}}.service';
+import { {{pascalCase name}}Controller } from './controllers/{{kebabCase name}}.controller';
+
+
+@Module({
+  imports: [
+    // <module />
+    MikroOrmModule.forFeature([{{pascalCase name}}]),
+  ],
+  providers: [
+    // <provider />
+    {{pascalCase name}}Service,
+  ],
+  controllers: [
+    // <controller />
+    {{pascalCase name}}Controller,
+  ],
+  exports: [
+    // <export />
+    {{pascalCase name}}Service,
+  ],
+})
+export class {{pascalCase name}}Module {}

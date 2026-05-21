@@ -1,0 +1,14 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { OkResponse } from '../../../common/responses/ok.response';
+
+export class Delete{{pascalCase name}}Data {}
+export class Delete{{pascalCase name}}Response extends OkResponse {
+  @ApiProperty({
+    type: () => Delete{{pascalCase name}}Data,
+  })
+  data!: Delete{{pascalCase name}}Data;
+  constructor(data: Delete{{pascalCase name}}Data) {
+    super();
+    this.data = data;
+  }
+}

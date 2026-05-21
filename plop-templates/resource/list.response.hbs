@@ -1,0 +1,16 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { OkResponse } from '../../../common/responses/ok.response';
+import { {{pascalCase name}} } from '../entities/{{kebabCase name}}.entity';
+
+export type List{{pascalCase name}}Data = {{pascalCase name}};
+export class List{{pascalCase name}}Response extends OkResponse {
+  @ApiProperty({
+    type: () => {{pascalCase name}},
+    isArray: true,
+  })
+  data!: List{{pascalCase name}}Data[];
+  constructor(data: List{{pascalCase name}}Data[]) {
+    super();
+    this.data = data;
+  }
+}

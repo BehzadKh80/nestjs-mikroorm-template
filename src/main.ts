@@ -1,5 +1,9 @@
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
+import {
+  ClassSerializerInterceptor,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { capitalCase } from 'change-case';
@@ -92,7 +96,7 @@ async function bootstrap() {
       // ---- Security & Sanitization ----
       whitelist: true, // Strip properties that are not in the DTO
       forbidNonWhitelisted: true, // Throw an error if extra properties are sent
-      forbidUnknownValues: true, // Reject objects without validation decorators
+      //forbidUnknownValues: true, // Reject objects without validation decorators
 
       // ---- Transformation ----
       transform: true, // Automatically transform payloads to DTO instances
@@ -121,6 +125,8 @@ async function bootstrap() {
       // },
     }),
   );
+  const reflector = app.get(Reflector);
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   // const fastify = app.getHttpAdapter().getInstance();
   // fastify.decorateRequest('logOut', logOut);

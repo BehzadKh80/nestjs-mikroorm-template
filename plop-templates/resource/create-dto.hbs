@@ -1,0 +1,9 @@
+import { OmitType } from '@nestjs/swagger';
+import { {{pascalCase name}} } from '../entities/{{kebabCase name}}.entity';
+
+export class Create{{pascalCase name}}Dto extends OmitType(Example, [
+  'id',
+  'createdAt',
+  'updatedAt',
+]) {}
+
