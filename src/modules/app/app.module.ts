@@ -22,6 +22,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ormModuleConfig } from '../orm/orm-module-config';
 import { HealthModule } from '../health/health.module';
 import { UserModule } from '../user/user.module';
+// <import />
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { UserModule } from '../user/user.module';
     HashModule,
 
     UserModule,
+    // <module />
   ],
 })
 export class AppModule {}
