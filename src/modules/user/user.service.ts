@@ -16,7 +16,7 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    let exist = await this.userRepository.findOne({
+    const exist = await this.userRepository.findOne({
       email: createUserDto.email,
     });
     if (exist) {
@@ -28,7 +28,7 @@ export class UserService {
       );
       throw new NotAcceptableException('user is exists');
     }
-    let newUser = this.userRepository.create(createUserDto);
+    const newUser = this.userRepository.create(createUserDto);
     await this.em.flush();
     return newUser;
   }

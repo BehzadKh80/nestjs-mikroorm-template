@@ -1,18 +1,17 @@
 import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
   isString,
   isBoolean,
 } from 'class-validator';
 
 @ValidatorConstraint({ name: 'booleanOrString', async: false })
 export class BooleanOrString implements ValidatorConstraintInterface {
-  validate(value: any, _?: ValidationArguments): Promise<boolean> | boolean {
+  validate(value: any): Promise<boolean> | boolean {
     return isString(value) || isBoolean(value);
   }
 
-  defaultMessage(_: ValidationArguments) {
+  defaultMessage() {
     return 'Text ($value) is not FQDN or IP!';
   }
 }

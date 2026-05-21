@@ -6,7 +6,7 @@ import { HashStrategy } from '../../hash/enums/hash.strategy.enum';
 
 export class SecurityConfig {
   @Expose({ name: 'SECURITY__HASH' })
-  @Transform(({ value }) => value ?? HashStrategy.ARGON2)
+  @Transform(({ value }): any => value ?? HashStrategy.ARGON2)
   @IsEnum(HashStrategy)
   hash!: HashStrategy;
 }

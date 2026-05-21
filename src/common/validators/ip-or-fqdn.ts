@@ -1,7 +1,6 @@
 import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
   isFQDN,
   isIP,
   Validate,
@@ -9,11 +8,11 @@ import {
 
 @ValidatorConstraint({ name: 'ipOrFqdn', async: false })
 export class IpOrFqdn implements ValidatorConstraintInterface {
-  validate(value: any, _?: ValidationArguments): Promise<boolean> | boolean {
+  validate(value: any): Promise<boolean> | boolean {
     return isFQDN(value) || isIP(value);
   }
 
-  defaultMessage(_: ValidationArguments) {
+  defaultMessage() {
     return 'Text ($value) is not FQDN or IP!';
   }
 }

@@ -1,6 +1,7 @@
 import { ConfigFactoryKeyHost, registerAs } from '@nestjs/config';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
-import { validateSync } from 'class-validator';
+import { isNumberString, validateSync } from 'class-validator';
+import { FALSE_STRINGS, TRUE_STRINGS } from '../constants';
 
 export const promiseTimeout = (
   ms: number,
@@ -34,18 +35,6 @@ export const parseUsedMemory = (info: string): number => {
   if (start < 0 || end < 0) return 0;
   return Number.parseInt(info.slice(start, end).split(':')[1] ?? '', 10);
 };
-
-export function addPrefix(
-  obj: Record<string, any>,
-  prefix: string,
-  addQoute?: boolean,
-) {
-  return Object.entries(obj).reduce((acc: any, [key, value]) => {
-    const newKey = addQoute ? `${prefix}"${key}"` : `${prefix}${key}`;
-    acc[newKey] = value;
-    return acc;
-  }, {});
-}
 
 export function getDateString(): string {
   const today = new Date();
@@ -102,4 +91,45 @@ export function createValidatedConfig<T extends object>(
 
     return validated;
   });
+}
+
+export function transformString(value: any, fallback: string): string {
+  if (typeof value === 'string') {
+    return value ?? fallback;
+  }
+  return fallback;
+}
+
+export function transformNumber(value: any, fallback: number): number {
+  if (typeof value === 'number') {
+    return value ?? fallback;
+  }
+  if (isNumberString(value)) {
+    return Number(value);
+  }
+  return fallback;
+}
+
+export function transformBoolean(value: any, fallback: boolean): boolean {
+  if (typeof value === 'boolean') {
+    return value;
+  } else if (typeof value === 'string') {
+    if (TRUE_STRINGS.includes(value.toLowerCase())) {
+      return true;
+    } else if (FALSE_STRINGS.includes(value.toLowerCase())) {
+      return false;
+    } else {
+      return fallback;
+    }
+  } else if (typeof value === 'number') {
+    if (value === 1) {
+      return true;
+    } else if (value === 0) {
+      return false;
+    } else {
+      return fallback;
+    }
+  } else {
+    return fallback;
+  }
 }

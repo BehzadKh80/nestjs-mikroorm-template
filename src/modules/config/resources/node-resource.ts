@@ -6,7 +6,7 @@ import { ConfigType } from '@nestjs/config';
 
 export class NodeConfig {
   @Expose({ name: 'NODE_ENV' })
-  @Transform(({ value }) => value ?? NodeEnv.PRODUCTION)
+  @Transform(({ value }): any => value ?? NodeEnv.PRODUCTION)
   @IsEnum(NodeEnv)
   env!: NodeEnv;
 }

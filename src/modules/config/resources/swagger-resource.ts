@@ -5,7 +5,7 @@ import { ConfigType } from '@nestjs/config';
 
 export class SwaggerConfig {
   @Expose({ name: 'SWAGGER__ENABLE' })
-  @Transform(({ value }) => value ?? false)
+  @Transform(({ value }): any => value ?? false)
   @IsBoolean()
   enable!: boolean;
 

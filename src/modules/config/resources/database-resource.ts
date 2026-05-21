@@ -1,5 +1,8 @@
 import { ConfigType } from '@nestjs/config';
-import { createValidatedConfig } from '../../../common/helper/functions';
+import {
+  createValidatedConfig,
+  transformString,
+} from '../../../common/helper/functions';
 import { Expose, Transform } from 'class-transformer';
 import {
   IsNotEmpty,
@@ -39,7 +42,7 @@ export class DatabaseConfig {
   name!: string;
 
   @Expose({ name: 'DATABASE__SCHEMA' })
-  @Transform(({ value }) => value ?? 'public')
+  @Transform(({ value }) => transformString(value, 'public'))
   @IsOptional()
   @IsString()
   schema?: string;

@@ -6,7 +6,7 @@ import {
 
 export const bullmqModuleOptions: SharedBullAsyncConfiguration = {
   inject: [REDIS_CONFIG_PROVIDER.KEY],
-  useFactory: async (redisConfig: RedisConfigType) => {
+  useFactory: (redisConfig: RedisConfigType) => {
     return {
       connection: {
         url: redisConfig.url,

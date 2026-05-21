@@ -6,12 +6,12 @@ import { LogLevel } from '../../../common/enums/log-level.enum';
 
 export class LogConfig {
   @Expose({ name: 'LOG__LEVEL' })
-  @Transform(({ value }) => value ?? LogLevel.INFO)
+  @Transform(({ value }): any => value ?? LogLevel.INFO)
   @IsEnum(LogLevel)
   level!: LogLevel;
 
   @Expose({ name: 'LOG__ENABLE' })
-  @Transform(({ value }) => value ?? true)
+  @Transform(({ value }): any => value ?? true)
   @IsBoolean()
   enable!: boolean;
 }
