@@ -1,10 +1,7 @@
-import { defineEntity, p } from '@mikro-orm/core';
-import { Base, BaseEntity } from '../../orm/base.entity';
+import { defineEntity } from '@mikro-orm/core';
+import { BaseEntity } from '../../orm/base.entity';
+import { {{pascalCase name}} } from '../domains/{{kebabCase name}}';
 import { {{pascalCase name}}Repository } from '../repositories/{{kebabCase name}}.repository';
-
-export class {{pascalCase name}} extends Base {
-  // <class-property />
-}
 
 export const {{pascalCase name}}Entity = defineEntity({
   name: '{{pascalCase name}}',

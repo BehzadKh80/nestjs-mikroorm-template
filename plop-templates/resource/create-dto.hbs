@@ -1,9 +1,7 @@
-import { OmitType } from '@nestjs/swagger';
-import { {{pascalCase name}} } from '../entities/{{kebabCase name}}.entity';
+import { PickType } from '@nestjs/swagger';
+import { {{pascalCase name}} } from '../domains/{{kebabCase name}}';
 
-export class Create{{pascalCase name}}Dto extends OmitType(Example, [
-  'id',
-  'createdAt',
-  'updatedAt',
+export class Create{{pascalCase name}}Dto extends PickType({{pascalCase name}}, [
+  // <property />
 ]) {}
 

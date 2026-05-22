@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { {{pascalCase name}} } from '../entities/{{kebabCase name}}.entity';
 import { CreatedResponse } from '../../../common/responses/created.response';
+import { {{pascalCase name}} } from '../domains/{{kebabCase name}}';
 
 export type Create{{pascalCase name}}Data = {{pascalCase name}};
 export class Create{{pascalCase name}}Response extends CreatedResponse {

@@ -1,0 +1,31 @@
+    {{camelCase name}}: p
+    {{#if (eq type 'enum')}}
+    .string()
+    {{else}}
+    .{{type}}()
+    {{/if}}
+    {{#if (isDbLength type) }}
+        {{#if length}}
+    .length({{length}})
+        {{/if}}
+    {{/if}}
+    {{#if nullable}}
+    .nullable()
+    {{/if}}
+    {{#if hidden}}
+    .hidden()
+    {{/if}}
+    {{#if lazy}}
+    .lazy()
+    {{/if}}
+    {{#if unique}}
+    .unique()
+    {{/if}}
+    {{#if array}}
+    .array()
+    {{/if}}
+    {{#if default}}
+    .default(
+        {{#if (isDbStringType type)}}"{{/if}}{{default}}{{#if (isDbStringType type)}}"{{/if}}
+    )
+    {{/if}},

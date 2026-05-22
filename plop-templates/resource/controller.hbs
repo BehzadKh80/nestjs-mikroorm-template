@@ -1,13 +1,16 @@
 import {
   Controller,
+  {{#if genCRUD}}
   Get,
   Post,
   Body,
   Patch,
   Param,
   Delete,
+  {{/if}}
 } from '@nestjs/common';
 import { {{pascalCase name}}Service } from '../services/{{kebabCase name}}.service';
+{{#if genCRUD}}
 import { Create{{pascalCase name}}Dto } from '../dto/create-{{kebabCase name}}.dto';
 import { Update{{pascalCase name}}Dto } from '../dto/update-{{kebabCase name}}.dto';
 import { Create{{pascalCase name}}Response } from '../responses/create-{{kebabCase name}}.response';
@@ -20,11 +23,12 @@ import { List{{pascalCase name}}Response } from '../responses/list-{{kebabCase n
 import { Detail{{pascalCase name}}Response } from '../responses/detail-{{kebabCase name}}.response';
 import { Update{{pascalCase name}}Response } from '../responses/update-{{kebabCase name}}.response';
 import { Delete{{pascalCase name}}Response } from '../responses/delete-{{kebabCase name}}.response';
+{{/if}}
 
 @Controller('{{kebabCase name}}')
 export class {{pascalCase name}}Controller {
-  constructor(private readonly {{pascalCase name}}Service: {{pascalCase name}}Service) {}
-
+  constructor(private readonly {{camelCase name}}Service: {{pascalCase name}}Service) {}
+  {{#if genCRUD}}
   @ApiCreatedResponse({
     type: Create{{pascalCase name}}Response,
   })
@@ -32,7 +36,7 @@ export class {{pascalCase name}}Controller {
   async create(
     @Body() create{{pascalCase name}}Dto: Create{{pascalCase name}}Dto,
   ): Promise<Create{{pascalCase name}}Response> {
-    const data = await this.{{pascalCase name}}Service.create(create{{pascalCase name}}Dto);
+    const data = await this.{{camelCase name}}Service.create(create{{pascalCase name}}Dto);
     return new Create{{pascalCase name}}Response(data);
   }
 
@@ -41,7 +45,7 @@ export class {{pascalCase name}}Controller {
   })
   @Get()
   async findAll() {
-    const data = await this.{{pascalCase name}}Service.findAll();
+    const data = await this.{{camelCase name}}Service.findAll();
     return new List{{pascalCase name}}Response(data);
   }
 
@@ -50,7 +54,7 @@ export class {{pascalCase name}}Controller {
   })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const data = await this.{{pascalCase name}}Service.findOne(id);
+    const data = await this.{{camelCase name}}Service.findOne(id);
     return new Detail{{pascalCase name}}Response(data);
   }
 
@@ -62,7 +66,7 @@ export class {{pascalCase name}}Controller {
     @Param('id') id: string,
     @Body() update{{pascalCase name}}Dto: Update{{pascalCase name}}Dto,
   ) {
-    const data = await this.{{pascalCase name}}Service.update(id, update{{pascalCase name}}Dto);
+    const data = await this.{{camelCase name}}Service.update(id, update{{pascalCase name}}Dto);
     return new Update{{pascalCase name}}Response(data);
   }
 
@@ -71,7 +75,8 @@ export class {{pascalCase name}}Controller {
   })
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    await this.{{pascalCase name}}Service.remove(id);
+    await this.{{camelCase name}}Service.remove(id);
     return new Delete{{pascalCase name}}Response({});
   }
+  {{/if}}
 }

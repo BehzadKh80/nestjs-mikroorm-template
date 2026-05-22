@@ -2,10 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { ClsService } from 'nestjs-cls';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+{{#if genCRUD}}
 import { Create{{pascalCase name}}Dto } from '../dto/create-{{kebabCase name}}.dto';
 import { Update{{pascalCase name}}Dto } from '../dto/update-{{kebabCase name}}.dto';
+{{/if}}
 import { {{pascalCase name}}Repository } from '../repositories/{{kebabCase name}}.repository';
-import { {{pascalCase name}} } from '../entities/{{kebabCase name}}.entity';
+import { {{pascalCase name}} } from '../domains/{{kebabCase name}}';
 
 @Injectable()
 export class {{pascalCase name}}Service {
@@ -17,7 +19,7 @@ export class {{pascalCase name}}Service {
     private readonly {{camelCase name}}Repository: {{pascalCase name}}Repository,
   ) {}
 
-
+  {{#if genCRUD}}
   async create(create{{pascalCase name}}Dto: Create{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
     const requestId = this.clsService.get('requestId');
     this.logger.info({ requestId, create{{pascalCase name}}Dto }, 'Creating {{camelCase name}}');
@@ -75,5 +77,5 @@ export class {{pascalCase name}}Service {
     await this.em.flush();
     this.logger.info({ requestId, id }, '{{pascalCase name}} removed successfully');
   }
-
+  {{/if}}
 }
