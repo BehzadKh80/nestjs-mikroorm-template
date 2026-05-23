@@ -72,6 +72,48 @@ function isIntegerType(plop: NodePlopAPI) {
   });
 }
 
+function format2Swagger(plop: NodePlopAPI) {
+  plop.setHelper(
+    'format2Swagger',
+    function (
+      format: string,
+      formatOption: string | undefined,
+    ): string | undefined {
+      if (format === 'Email') {
+        return 'email';
+      } else if (format === 'StrongPassword') {
+        return 'password';
+      } else if (format === 'IP') {
+        if (formatOption === '4') {
+          return 'ipv4';
+        } else {
+          return 'ipv6';
+        }
+      } else if (format === 'FQDN') {
+        return 'idn-hostname';
+      } else if (format === 'Url') {
+        return 'uri';
+      }
+      return undefined;
+    },
+  );
+}
+
+function isSelectableFormat(plop: NodePlopAPI) {
+  plop.setHelper('isSelectableFormat', function (format: string) {
+    return [
+      'IdentityCard',
+      'PassportNumber',
+      'IP',
+      'PostalCode',
+      'ISBN',
+      'MobilePhone',
+      'PhoneNumber',
+      'Hash',
+    ].includes(format);
+  });
+}
+
 function logicalEqual(plop: NodePlopAPI) {
   plop.setHelper('eq', function (a: any, b: any) {
     return a === b;
@@ -115,6 +157,8 @@ function logicalOr(plop: NodePlopAPI) {
 
 const helpers: ((plop: NodePlopAPI) => void)[] = [
   isNumberType,
+  isSelectableFormat,
+  format2Swagger,
   isDbStringType,
   isDbLength,
   dbType2Ts,
@@ -652,6 +696,7 @@ function propertyGenerator(plop: NodePlopAPI) {
         message: 'setup validator:',
         default: true,
       },
+      // --- String Validator ---
       {
         type: 'number',
         name: 'minLength',
@@ -681,6 +726,705 @@ function propertyGenerator(plop: NodePlopAPI) {
           return false;
         },
         default: 0,
+      },
+      {
+        type: 'list',
+        name: 'format',
+        message: 'string format:',
+        choices: [
+          'skip',
+          'Alpha',
+          'Alphanumeric',
+          'Decimal',
+          'Ascii',
+          'Base32',
+          'Base58',
+          'Base64',
+          'IBAN',
+          'BIC',
+          'CreditCard',
+          'Currency',
+          'ISO4217CurrencyCode',
+          'EthereumAddress',
+          'BtcAddress',
+          'DataURI',
+          'Email',
+          'FQDN',
+          'FullWidth',
+          'HalfWidth',
+          'VariableWidth',
+          'HexColor',
+          'HSL',
+          'RgbColor',
+          'IdentityCard',
+          'PassportNumber',
+          'PostalCode',
+          'Hexadecimal',
+          'Octal',
+          'MACAddress',
+          'IP',
+          'Port',
+          'ISBN',
+          'EAN',
+          'ISIN',
+          'ISO8601',
+          'JSON',
+          'JWT',
+          'Lowercase',
+          'LatLong',
+          'Latitude',
+          'Longitude',
+          'MobilePhone',
+          'ISO6391',
+          'ISO31661Alpha2',
+          'ISO31661Alpha3',
+          'ISO31661Numeric',
+          'Locale',
+          'PhoneNumber',
+          'MongoId',
+          'Multibyte',
+          'NumberString',
+          'SurrogatePair',
+          'TaxId',
+          'Url',
+          'MagnetURI',
+          'FirebasePushId',
+          'Uppercase',
+          'MilitaryTime',
+          'TimeZone',
+          'Hash',
+          'MimeType',
+          'SemVer',
+          'ISSN',
+          'ISRC',
+          'RFC3339',
+          'StrongPassword',
+        ],
+        default: 0,
+        when: (answers) => {
+          if (!answers.addValidator) {
+            return false;
+          }
+          if (['string', 'character', 'text'].includes(answers.type)) {
+            return true;
+          }
+          return false;
+        },
+      },
+      {
+        type: 'list',
+        name: 'formatOption',
+        message: 'format option:',
+        choices: (answers) => {
+          if (answers.format === 'IdentityCard') {
+            return [
+              'ar-LY',
+              'ar-TN',
+              'ES',
+              'FI',
+              'he-IL',
+              'IN',
+              'IR',
+              'IT',
+              'LK',
+              'NO',
+              'PK',
+              'PL',
+              'TH',
+              'zh-CN',
+              'zh-HK',
+              'zh-TW',
+            ];
+          } else if (answers.format === 'PassportNumber') {
+            return [
+              'AM',
+              'AR',
+              'AT',
+              'AU',
+              'AZ',
+              'BE',
+              'BG',
+              'BR',
+              'BY',
+              'CA',
+              'CH',
+              'CN',
+              'CY',
+              'CZ',
+              'DE',
+              'DK',
+              'DZ',
+              'EE',
+              'ES',
+              'FI',
+              'FR',
+              'GB',
+              'GR',
+              'HR',
+              'HU',
+              'IE',
+              'IN',
+              'ID',
+              'IR',
+              'IS',
+              'IT',
+              'JM',
+              'JP',
+              'KR',
+              'KZ',
+              'LI',
+              'LT',
+              'LU',
+              'LV',
+              'LY',
+              'MT',
+              'MZ',
+              'MY',
+              'MX',
+              'NL',
+              'NZ',
+              'PH',
+              'PK',
+              'PL',
+              'PT',
+              'RO',
+              'RU',
+              'SE',
+              'SL',
+              'SK',
+              'TH',
+              'TR',
+              'UA',
+              'US',
+              'ZA',
+            ];
+          } else if (answers.format === 'IP') {
+            return ['4', '6'];
+          } else if (answers.format === 'PostalCode') {
+            return [
+              'AD',
+              'AT',
+              'AU',
+              'AZ',
+              'BA',
+              'BD',
+              'BE',
+              'BG',
+              'BR',
+              'BY',
+              'CA',
+              'CH',
+              'CN',
+              'CO',
+              'CZ',
+              'DE',
+              'DK',
+              'DO',
+              'DZ',
+              'EE',
+              'ES',
+              'FI',
+              'FR',
+              'GB',
+              'GR',
+              'HR',
+              'HT',
+              'HU',
+              'ID',
+              'IE',
+              'IL',
+              'IN',
+              'IR',
+              'IS',
+              'IT',
+              'JP',
+              'KE',
+              'KR',
+              'LI',
+              'LT',
+              'LU',
+              'LV',
+              'LK',
+              'MG',
+              'MX',
+              'MT',
+              'MY',
+              'NL',
+              'NO',
+              'NP',
+              'NZ',
+              'PK',
+              'PL',
+              'PR',
+              'PT',
+              'RO',
+              'RU',
+              'SA',
+              'SE',
+              'SG',
+              'SI',
+              'SK',
+              'TH',
+              'TN',
+              'TW',
+              'UA',
+              'US',
+              'ZA',
+              'ZM',
+            ];
+          } else if (answers.foramt === 'ISBN') {
+            return ['10', '13'];
+          } else if (answers.format === 'MobilePhone') {
+            return [
+              'am-AM',
+              'ar-AE',
+              'ar-BH',
+              'ar-DZ',
+              'ar-LB',
+              'ar-EG',
+              'ar-IQ',
+              'ar-JO',
+              'ar-KW',
+              'ar-LY',
+              'ar-MA',
+              'ar-OM',
+              'ar-PS',
+              'ar-SA',
+              'ar-SD',
+              'ar-SY',
+              'ar-TN',
+              'az-AZ',
+              'ar-QA',
+              'bs-BA',
+              'be-BY',
+              'bg-BG',
+              'bn-BD',
+              'ca-AD',
+              'cs-CZ',
+              'da-DK',
+              'de-DE',
+              'de-AT',
+              'de-CH',
+              'de-LU',
+              'dv-MV',
+              'el-GR',
+              'el-CY',
+              'en-AI',
+              'en-AU',
+              'en-AG',
+              'en-BM',
+              'en-BS',
+              'en-GB',
+              'en-GG',
+              'en-GH',
+              'en-GY',
+              'en-HK',
+              'en-MO',
+              'en-IE',
+              'en-IN',
+              'en-JM',
+              'en-KE',
+              'fr-CF',
+              'en-SS',
+              'en-KI',
+              'en-KN',
+              'en-LS',
+              'en-MT',
+              'en-MU',
+              'en-MW',
+              'en-NA',
+              'en-NG',
+              'en-NZ',
+              'en-PG',
+              'en-PK',
+              'en-PH',
+              'en-RW',
+              'en-SG',
+              'en-SL',
+              'en-TZ',
+              'en-UG',
+              'en-US',
+              'en-ZA',
+              'en-ZM',
+              'en-ZW',
+              'en-BW',
+              'es-AR',
+              'es-BO',
+              'es-CO',
+              'es-CL',
+              'es-CR',
+              'es-CU',
+              'es-DO',
+              'es-HN',
+              'es-EC',
+              'es-ES',
+              'es-GT',
+              'es-PE',
+              'es-MX',
+              'es-NI',
+              'es-PA',
+              'es-PY',
+              'es-SV',
+              'es-UY',
+              'es-VE',
+              'et-EE',
+              'fa-IR',
+              'fi-FI',
+              'fj-FJ',
+              'fo-FO',
+              'fr-BF',
+              'fr-BJ',
+              'fr-CD',
+              'fr-CM',
+              'fr-FR',
+              'fr-GF',
+              'fr-GP',
+              'fr-MQ',
+              'fr-PF',
+              'fr-RE',
+              'fr-WF',
+              'he-IL',
+              'hu-HU',
+              'id-ID',
+              'ir-IR',
+              'it-IT',
+              'it-SM',
+              'ja-JP',
+              'ka-GE',
+              'kk-KZ',
+              'kl-GL',
+              'ko-KR',
+              'ky-KG',
+              'lt-LT',
+              'lv-LV',
+              'mg-MG',
+              'mn-MN',
+              'my-MM',
+              'ms-MY',
+              'mz-MZ',
+              'nb-NO',
+              'ne-NP',
+              'nl-BE',
+              'nl-NL',
+              'nl-AW',
+              'nn-NO',
+              'pl-PL',
+              'pt-BR',
+              'pt-PT',
+              'pt-AO',
+              'ro-MD',
+              'ro-RO',
+              'ru-RU',
+              'si-LK',
+              'sl-SI',
+              'sk-SK',
+              'so-SO',
+              'sq-AL',
+              'sr-RS',
+              'sv-SE',
+              'tg-TJ',
+              'th-TH',
+              'tr-TR',
+              'tk-TM',
+              'uk-UA',
+              'uz-UZ',
+              'vi-VN',
+              'zh-CN',
+              'zh-TW',
+              'dz-BT',
+              'ar-YE',
+              'ar-EH',
+              'fa-AF',
+              'mk-MK',
+            ];
+          } else if (answers.format === 'PhoneNumber') {
+            return [
+              'AC',
+              'AD',
+              'AE',
+              'AF',
+              'AG',
+              'AI',
+              'AL',
+              'AM',
+              'AO',
+              'AR',
+              'AS',
+              'AT',
+              'AU',
+              'AW',
+              'AX',
+              'AZ',
+              'BA',
+              'BB',
+              'BD',
+              'BE',
+              'BF',
+              'BG',
+              'BH',
+              'BI',
+              'BJ',
+              'BL',
+              'BM',
+              'BN',
+              'BO',
+              'BQ',
+              'BR',
+              'BS',
+              'BT',
+              'BW',
+              'BY',
+              'BZ',
+              'CA',
+              'CC',
+              'CD',
+              'CF',
+              'CG',
+              'CH',
+              'CI',
+              'CK',
+              'CL',
+              'CM',
+              'CN',
+              'CO',
+              'CR',
+              'CU',
+              'CV',
+              'CW',
+              'CX',
+              'CY',
+              'CZ',
+              'DE',
+              'DJ',
+              'DK',
+              'DM',
+              'DO',
+              'DZ',
+              'EC',
+              'EE',
+              'EG',
+              'EH',
+              'ER',
+              'ES',
+              'ET',
+              'FI',
+              'FJ',
+              'FK',
+              'FM',
+              'FO',
+              'FR',
+              'GA',
+              'GB',
+              'GD',
+              'GE',
+              'GF',
+              'GG',
+              'GH',
+              'GI',
+              'GL',
+              'GM',
+              'GN',
+              'GP',
+              'GQ',
+              'GR',
+              'GT',
+              'GU',
+              'GW',
+              'GY',
+              'HK',
+              'HN',
+              'HR',
+              'HT',
+              'HU',
+              'ID',
+              'IE',
+              'IL',
+              'IM',
+              'IN',
+              'IO',
+              'IQ',
+              'IR',
+              'IS',
+              'IT',
+              'JE',
+              'JM',
+              'JO',
+              'JP',
+              'KE',
+              'KG',
+              'KH',
+              'KI',
+              'KM',
+              'KN',
+              'KP',
+              'KR',
+              'KW',
+              'KY',
+              'KZ',
+              'LA',
+              'LB',
+              'LC',
+              'LI',
+              'LK',
+              'LR',
+              'LS',
+              'LT',
+              'LU',
+              'LV',
+              'LY',
+              'MA',
+              'MC',
+              'MD',
+              'ME',
+              'MF',
+              'MG',
+              'MH',
+              'MK',
+              'ML',
+              'MM',
+              'MN',
+              'MO',
+              'MP',
+              'MQ',
+              'MR',
+              'MS',
+              'MT',
+              'MU',
+              'MV',
+              'MW',
+              'MX',
+              'MY',
+              'MZ',
+              'NA',
+              'NC',
+              'NE',
+              'NF',
+              'NG',
+              'NI',
+              'NL',
+              'NO',
+              'NP',
+              'NR',
+              'NU',
+              'NZ',
+              'OM',
+              'PA',
+              'PE',
+              'PF',
+              'PG',
+              'PH',
+              'PK',
+              'PL',
+              'PM',
+              'PR',
+              'PS',
+              'PT',
+              'PW',
+              'PY',
+              'QA',
+              'RE',
+              'RO',
+              'RS',
+              'RU',
+              'RW',
+              'SA',
+              'SB',
+              'SC',
+              'SD',
+              'SE',
+              'SG',
+              'SH',
+              'SI',
+              'SJ',
+              'SK',
+              'SL',
+              'SM',
+              'SN',
+              'SO',
+              'SR',
+              'SS',
+              'ST',
+              'SV',
+              'SX',
+              'SY',
+              'SZ',
+              'TA',
+              'TC',
+              'TD',
+              'TG',
+              'TH',
+              'TJ',
+              'TK',
+              'TL',
+              'TM',
+              'TN',
+              'TO',
+              'TR',
+              'TT',
+              'TV',
+              'TW',
+              'TZ',
+              'UA',
+              'UG',
+              'US',
+              'UY',
+              'UZ',
+              'VA',
+              'VC',
+              'VE',
+              'VG',
+              'VI',
+              'VN',
+              'VU',
+              'WF',
+              'WS',
+              'XK',
+              'YE',
+              'YT',
+              'ZA',
+              'ZM',
+              'ZW',
+            ];
+          } else if (answers.format === 'Hash') {
+            return [
+              'md4',
+              'md5',
+              'sha1',
+              'sha256',
+              'sha384',
+              'sha512',
+              'ripemd128',
+              'ripemd160',
+              'tiger128',
+              'tiger160',
+              'tiger192',
+              'crc32',
+              'crc32b',
+            ];
+          }
+          return [];
+        },
+        when: (answers) => {
+          if (!answers.addValidator) {
+            return false;
+          }
+          if (
+            ['string', 'character', 'text'].includes(answers.type) &&
+            [
+              'IdentityCard',
+              'PassportNumber',
+              'IP',
+              'PostalCode',
+              'ISBN',
+              'MobilePhone',
+              'PhoneNumber',
+              'Hash',
+            ].includes(answers.format)
+          ) {
+            return true;
+          }
+          return false;
+        },
       },
       // --- Number Validator ---
       {
@@ -717,7 +1461,38 @@ function propertyGenerator(plop: NodePlopAPI) {
         },
         default: 0,
       },
-      // ----
+      // ---- Array Validator ----
+      {
+        type: 'number',
+        name: 'minItems',
+        message: 'minimum items:',
+        when: (answers) => {
+          if (!answers.addValidator) {
+            return false;
+          }
+          if (answers.array) {
+            return true;
+          }
+          return false;
+        },
+        default: 0,
+      },
+      {
+        type: 'number',
+        name: 'maxItems',
+        message: 'maximum items:',
+        when: (answers) => {
+          if (!answers.addValidator) {
+            return false;
+          }
+          if (answers.array) {
+            return true;
+          }
+          return false;
+        },
+        default: 0,
+      },
+      // ---- UUID Validators
       {
         type: 'list',
         name: 'uuidVersion',
@@ -793,6 +1568,19 @@ function propertyGenerator(plop: NodePlopAPI) {
         message: 'swagger example:',
         default: (answers: Record<string, any>) => {
           if (['string', 'text', 'character'].includes(answers.type)) {
+            if (answers.format !== 'skip') {
+              if (answers.format === 'Email') {
+                return 'example@example.com';
+              } else if (answers.format === 'StrongPassword') {
+                return 'Example@1234';
+              } else if (answers.format === 'IP') {
+                if (answers.formatOption === '4') {
+                  return '127.0.0.1';
+                } else {
+                  return '::1';
+                }
+              }
+            }
             let mn: number = answers.minLength ? answers.minLength : 0;
             let mx: number = answers.maxLength ? answers.maxLength : 10;
             if (answers.type === 'character') {
@@ -992,8 +1780,8 @@ function propertyGenerator(plop: NodePlopAPI) {
           }
           if (!['string', 'text', 'character'].includes(answers.type)) {
             return 'MaxLength - property is not string';
-          } else if (answers.maxLength === 0) {
-            return 'MaxLength - value is zero';
+          } else if (answers.maxLength < 0) {
+            return 'MaxLength - value is less than zero';
           }
         },
       },
@@ -1010,8 +1798,26 @@ function propertyGenerator(plop: NodePlopAPI) {
           }
           if (!['string', 'text', 'character'].includes(answers.type)) {
             return 'MinLength - property is not string';
-          } else if (answers.minLength === 0) {
-            return 'MinLength - value is zero';
+          } else if (answers.minLength < 0) {
+            return 'MinLength - value is less than zero';
+          }
+        },
+      },
+      {
+        type: 'addImport',
+        data: {
+          path: domainPath,
+          importName: 'Is{{format}}',
+          from: 'class-validator',
+        },
+        skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return `${answers.format} - validator is disabled`;
+          }
+          if (!['string', 'text', 'character'].includes(answers.type)) {
+            return `${answers.format} - property is not string`;
+          } else if (answers.format === 'skip') {
+            return `${answers.format} - value is less than zero`;
           }
         },
       },
@@ -1089,6 +1895,42 @@ function propertyGenerator(plop: NodePlopAPI) {
           }
           if (!answers.array) {
             return 'IsArray - property is not array';
+          }
+        },
+      },
+      {
+        type: 'addImport',
+        data: {
+          path: domainPath,
+          importName: 'ArrayMaxSize',
+          from: 'class-validator',
+        },
+        skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'ArrayMaxSize - validator is disabled';
+          }
+          if (!answers.array) {
+            return 'ArrayMaxSize - property is not array';
+          } else if (answers.maxItems < 0) {
+            return 'ArrayMaxSize - value is less than zero';
+          }
+        },
+      },
+      {
+        type: 'addImport',
+        data: {
+          path: domainPath,
+          importName: 'ArrayMinSize',
+          from: 'class-validator',
+        },
+        skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'ArrayMinSize - validator is disabled';
+          }
+          if (!answers.array) {
+            return 'ArrayMinSize - property is not array';
+          } else if (answers.minItems < 0) {
+            return 'ArrayMinSize - value is less than zero';
           }
         },
       },

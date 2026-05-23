@@ -9,6 +9,9 @@
     {{#if addValidator}}
       {{#if ( or (or (eq type 'string') (eq type 'text')) (eq type 'character') )}}
     type: 'string',
+        {{#if (and (neq format 'skip') (format2Swagger format))}}
+    format: '{{format2Swagger format}}',
+        {{/if}}
         {{#if (and (gt minLength 0) (neq type 'character'))}}
     minLength: {{minLength}},
         {{/if}}
@@ -42,11 +45,23 @@
     {{/if}}
     {{#if array}}
     isArray: true,
+      {{#if (gte maxItems 0 )}}
+    maxItems: {{maxItems}},
+      {{/if}}
+      {{#if (gte minItems 0) }}
+    minItems: {{minItems}},
+      {{/if}}
     {{/if}}
     {{#if swaggerExample}}
     example:{{#if array}}[{{/if}}
-      {{#if (or (or (isStringType type) (eq type 'uuid') (eq type 'datetime')))}}
-        '{{swaggerExample}}'
+      {{#if (eq type 'uuid')}}
+      '{{swaggerExample}}'
+      {{/if}}
+      {{#if (isStringType type)}}
+      '{{swaggerExample}}'
+      {{/if}}
+      {{#if (eq type 'datetime')}}
+      '{{swaggerExample}}'
       {{/if}}
       {{#if (isNumberType type)}}
         {{swaggerExample}}
@@ -77,6 +92,12 @@
     {{/if}}
     {{#if array}}
   @IsArray()
+      {{#if (gte minItems 0)}}
+  @ArrayMinSize({{minItems}})
+      {{/if}}
+      {{#if (gte maxItems 0)}}
+  @ArrayMaxSize({{maxItems}})
+      {{/if}}
     {{/if}}
     {{#if (eq type 'enum')}}
   @IsEnum({{pascalCase enumName}}, {
@@ -107,12 +128,22 @@
   @IsString({
     {{#if array}}each: true{{/if}}
   })
-      {{#if (and (gt minLength 0) (neq type 'character'))}}
+      {{#if (neq format 'skip')}}
+  @Is{{format}}(
+  {{#if (isSelectableFormat format)}}
+    {{formatOption}}
+  ,
+  {{/if}}
+  {
+    {{#if array}}each: true{{/if}}
+  })
+      {{/if}}
+      {{#if (and (gte minLength 0) (neq type 'character'))}}
   @MinLength({{minLength}}, {
     {{#if array}}each: true{{/if}}
   })
       {{/if}}
-      {{#if (gt maxLength 0)}}
+      {{#if (gte maxLength 0)}}
         {{#if (and (eq type 'character'))}}
   @MinLength({{maxLength}}, {
     {{#if array}}each: true{{/if}}
