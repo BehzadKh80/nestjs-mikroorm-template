@@ -866,11 +866,13 @@ function propertyGenerator(plop: NodePlopAPI) {
           importName: 'ApiProperty',
           from: '@nestjs/swagger',
         },
-        skip: (answers: Record<string, any>): string | undefined => {
-          if (answers.swagger && answers.nullable) {
+        skip: (answers: Record<string, any>) => {
+          if (!answers.swagger) {
+            return 'ApiProperty - swagger is disabled';
+          }
+          if (answers.nullable) {
             return 'ApiProperty - property is optional';
           }
-          return undefined;
         },
       },
       {
@@ -881,7 +883,10 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: '@nestjs/swagger',
         },
         skip: (answers: Record<string, any>) => {
-          if (answers.swagger && !answers.nullable) {
+          if (!answers.swagger) {
+            return 'ApiPropertyOptional - swagger is disabled';
+          }
+          if (!answers.nullable) {
             return 'ApiPropertyOptional - property is not optional';
           }
         },
@@ -903,6 +908,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsOptional - validator is disabled';
+          }
           if (!answers.nullable) {
             return 'IsOptional - property is not optional';
           }
@@ -946,6 +954,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsEnum - validator is disabled';
+          }
           if (answers.type !== 'enum') {
             return 'IsEnum - property is not enum';
           }
@@ -960,6 +971,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsString - validator is disabled';
+          }
           if (!['string', 'text', 'character'].includes(answers.type)) {
             return 'IsString - property is not string';
           }
@@ -973,10 +987,11 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'MaxLength - validator is disabled';
+          }
           if (!['string', 'text', 'character'].includes(answers.type)) {
             return 'MaxLength - property is not string';
-          } else if (!answers.addValidator) {
-            return 'MaxLength - validator is disabled';
           } else if (answers.maxLength === 0) {
             return 'MaxLength - value is zero';
           }
@@ -990,10 +1005,11 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'MinLength - validator is disabled';
+          }
           if (!['string', 'text', 'character'].includes(answers.type)) {
             return 'MinLength - property is not string';
-          } else if (!answers.addValidator) {
-            return 'MinLength - validator is disabled';
           } else if (answers.minLength === 0) {
             return 'MinLength - value is zero';
           }
@@ -1008,12 +1024,13 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'Max - validator is disabled';
+          }
           if (
             !['integer', 'float', 'smallint', 'bigint'].includes(answers.type)
           ) {
             return 'Max - property is not number';
-          } else if (!answers.addValidator) {
-            return 'Max - validator is disabled';
           } else if (answers.maxNumber < 0) {
             return 'Max - value is less than zero';
           }
@@ -1027,12 +1044,14 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'Min - validator is disabled';
+          }
+
           if (
             !['integer', 'float', 'smallint', 'bigint'].includes(answers.type)
           ) {
             return 'Min - property is not number';
-          } else if (!answers.addValidator) {
-            return 'Min - validator is disabled';
           } else if (answers.minNumber < 0) {
             return 'Min - value is less than zero';
           }
@@ -1046,6 +1065,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsNumber - validator is disabled';
+          }
           if (
             !['integer', 'float', 'smallint', 'bigint'].includes(answers.type)
           ) {
@@ -1062,6 +1084,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsArray - validator is disabled';
+          }
           if (!answers.array) {
             return 'IsArray - property is not array';
           }
@@ -1076,6 +1101,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsBoolean - validator is disabled';
+          }
           if (!['boolean'].includes(answers.type)) {
             return 'IsBoolean - property is not boolean';
           }
@@ -1090,6 +1118,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsUUID - validator is disabled';
+          }
           if (!['uuid'].includes(answers.type)) {
             return 'IsUUID - property is not uuid';
           }
@@ -1104,6 +1135,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsDate - validator is disabled';
+          }
           if (!['datetime', 'date', 'time'].includes(answers.type)) {
             return 'IsDate - property is not date';
           }
@@ -1117,6 +1151,9 @@ function propertyGenerator(plop: NodePlopAPI) {
           from: 'class-validator',
         },
         skip: (answers: Record<string, any>) => {
+          if (!answers.addValidator) {
+            return 'IsNotEmpty - validator is disabled';
+          }
           if (answers.nullable) {
             return 'IsNotEmpty - property is optional';
           }
