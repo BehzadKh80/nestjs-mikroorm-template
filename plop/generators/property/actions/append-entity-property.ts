@@ -6,7 +6,7 @@ export default function appendEntityProperty(_plop: NodePlopAPI): ActionType {
   return {
     type: 'append',
     path: ENTITY_PATH,
-    pattern: /\<entity-property \/\>/,
+    pattern: /\/\/ \<properties\>/,
     unique: true,
     templateFile: `${TEMPLATE_DIR}/entity-property.hbs`,
   };

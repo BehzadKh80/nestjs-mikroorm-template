@@ -1,25 +1,53 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+// <imports>
+// <import name="EntityManager">
 import { EntityManager } from '@mikro-orm/postgresql';
+// </import>
+// <import name="ClsService">
 import { ClsService } from 'nestjs-cls';
+// </import>
+// <import name="PinoLogger">
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+// </import>
 {{#if genCRUD}}
+// <import name="Create{{pascalCase name}}Dto">
 import { Create{{pascalCase name}}Dto } from '../dto/create-{{kebabCase name}}.dto';
+// </import>
+// <import name="Update{{pascalCase name}}Dto">
 import { Update{{pascalCase name}}Dto } from '../dto/update-{{kebabCase name}}.dto';
+// </import>
 {{/if}}
+// <import name="{{pascalCase name}}Repository">
 import { {{pascalCase name}}Repository } from '../repositories/{{kebabCase name}}.repository';
+// </import>
+// <import name="{{pascalCase name}}">
 import { {{pascalCase name}} } from '../domains/{{kebabCase name}}';
+// </import>
+// </imports>
 
 @Injectable()
 export class {{pascalCase name}}Service {
   constructor(
+    // <properties>
+    // <property name="logger">
     @InjectPinoLogger({{pascalCase name}}Service.name)
     private readonly logger: PinoLogger,
+    // </property>
+    // <property name="clsService">
     private readonly clsService: ClsService,
+    // </property>
+    // <property name="em">
     private readonly em: EntityManager,
+    // </property>
+    // <property name="{{camelCase name}}Repository">
     private readonly {{camelCase name}}Repository: {{pascalCase name}}Repository,
+    // </property>
+    // </properties>
   ) {}
 
   {{#if genCRUD}}
+  // <functions>
+  // <function name="create">
   async create(create{{pascalCase name}}Dto: Create{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
     const requestId = this.clsService.get('requestId');
     this.logger.info({ requestId, create{{pascalCase name}}Dto }, 'Creating {{camelCase name}}');
@@ -30,7 +58,9 @@ export class {{pascalCase name}}Service {
     this.logger.info({ requestId, id: {{camelCase name}}.id }, '{{pascalCase name}} created successfully');
     return {{camelCase name}};
   }
+  // </function>
 
+  // <function name="findAll">
   async findAll(): Promise<{{pascalCase name}}[]> {
     const requestId = this.clsService.get('requestId');
     this.logger.info({ requestId }, 'Fetching all {{camelCase name}}s');
@@ -40,7 +70,9 @@ export class {{pascalCase name}}Service {
     this.logger.info({ requestId, count: {{camelCase name}}s.length }, '{{pascalCase name}}s fetched successfully');
     return {{camelCase name}}s;
   }
-
+  // </function>
+  
+  // <function name="findOne">
   async findOne(id: string): Promise<{{pascalCase name}}> {
     const requestId = this.clsService.get('requestId');
     this.logger.info({ requestId, id }, 'Fetching {{camelCase name}} by id');
@@ -55,7 +87,9 @@ export class {{pascalCase name}}Service {
     this.logger.info({ requestId, id }, '{{pascalCase name}} fetched successfully');
     return {{camelCase name}};
   }
-
+  // </function>
+  
+  // <function name="update">
   async update(id: string, update{{pascalCase name}}Dto: Update{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
     const requestId = this.clsService.get('requestId');
     this.logger.info({ requestId, id, update{{pascalCase name}}Dto }, 'Updating {{camelCase name}}');
@@ -67,7 +101,9 @@ export class {{pascalCase name}}Service {
     this.logger.info({ requestId, id }, '{{pascalCase name}} updated successfully');
     return {{camelCase name}};
   }
-
+  // </function>
+  
+  // <function name="remove">
   async remove(id: string): Promise<void> {
     const requestId = this.clsService.get('requestId');
     this.logger.info({ requestId, id }, 'Removing {{camelCase name}}');
@@ -77,5 +113,8 @@ export class {{pascalCase name}}Service {
     await this.em.flush();
     this.logger.info({ requestId, id }, '{{pascalCase name}} removed successfully');
   }
+  // </function>
+
+  // </functions>
   {{/if}}
 }

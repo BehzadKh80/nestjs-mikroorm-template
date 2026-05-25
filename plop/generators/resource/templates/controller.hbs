@@ -9,16 +9,18 @@ import {
   Delete,
   {{/if}}
 } from '@nestjs/common';
-import { {{pascalCase name}}Service } from '../services/{{kebabCase name}}.service';
-{{#if genCRUD}}
-import { Create{{pascalCase name}}Dto } from '../dto/create-{{kebabCase name}}.dto';
-import { Update{{pascalCase name}}Dto } from '../dto/update-{{kebabCase name}}.dto';
-import { Create{{pascalCase name}}Response } from '../responses/create-{{kebabCase name}}.response';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiResponse,
 } from '@nestjs/swagger';
+
+import { {{pascalCase name}}Service } from '../services/{{kebabCase name}}.service';
+{{#if genCRUD}}
+import { Create{{pascalCase name}}Dto } from '../dto/create-{{kebabCase name}}.dto';
+import { Update{{pascalCase name}}Dto } from '../dto/update-{{kebabCase name}}.dto';
+import { Create{{pascalCase name}}Response } from '../responses/create-{{kebabCase name}}.response';
+
 import { List{{pascalCase name}}Response } from '../responses/list-{{kebabCase name}}.response';
 import { Detail{{pascalCase name}}Response } from '../responses/detail-{{kebabCase name}}.response';
 import { Update{{pascalCase name}}Response } from '../responses/update-{{kebabCase name}}.response';
@@ -27,8 +29,16 @@ import { Delete{{pascalCase name}}Response } from '../responses/delete-{{kebabCa
 
 @Controller('{{kebabCase name}}')
 export class {{pascalCase name}}Controller {
-  constructor(private readonly {{camelCase name}}Service: {{pascalCase name}}Service) {}
+  constructor(
+    // <properties>
+    // <property name="{{camelCase name}}Service">
+    private readonly {{camelCase name}}Service: {{pascalCase name}}Service,
+    // </property>
+    // </properties>
+  ) {}
+
   {{#if genCRUD}}
+  // <routes>
   @ApiCreatedResponse({
     type: Create{{pascalCase name}}Response,
   })
@@ -78,5 +88,6 @@ export class {{pascalCase name}}Controller {
     await this.{{camelCase name}}Service.remove(id);
     return new Delete{{pascalCase name}}Response({});
   }
+  // </routes>
   {{/if}}
 }

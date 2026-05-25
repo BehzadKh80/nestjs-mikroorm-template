@@ -8,7 +8,7 @@ export default function appendModuleController(
   return {
     type: 'append',
     path: 'src/modules/{{kebabCase moduleName}}/{{kebabCase moduleName}}.module.ts',
-    pattern: /\<controller \/\>/,
+    pattern: /\/\/ \<controllers\>/,
     unique: true,
     templateFile: `${TEMPLATE_DIR}/module-controller.hbs`,
   };

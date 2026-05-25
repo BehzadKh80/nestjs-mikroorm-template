@@ -6,7 +6,7 @@ export default function appendClassProperty(_plop: NodePlopAPI): ActionType {
   return {
     type: 'append',
     path: DOMAIN_PATH,
-    pattern: /\<class-property \/\>/,
+    pattern: /\/\/ \<properties\>/,
     unique: true,
     templateFile: `${TEMPLATE_DIR}/class-property.hbs`,
   };

@@ -6,7 +6,7 @@ export default function appendModuleProvider(_plop: NodePlopAPI): ActionType {
   return {
     type: 'append',
     path: 'src/modules/{{kebabCase moduleName}}/{{kebabCase moduleName}}.module.ts',
-    pattern: /\<provider \/\>/,
+    pattern: /\/\/ \<providers\>/,
     unique: true,
     templateFile: `${TEMPLATE_DIR}/module-provider.hbs`,
   };

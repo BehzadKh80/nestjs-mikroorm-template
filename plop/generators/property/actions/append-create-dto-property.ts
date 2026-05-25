@@ -8,7 +8,7 @@ export default function appendCreateDtoProperty(
   return {
     type: 'append',
     path: 'src/modules/{{kebabCase moduleName}}/dto/create-{{kebabCase entityName}}.dto.ts',
-    pattern: /\<property \/\>/,
+    pattern: /\/\/ \<properties\>/,
     unique: true,
     templateFile: `${TEMPLATE_DIR}/create-dto-property.hbs`,
   };

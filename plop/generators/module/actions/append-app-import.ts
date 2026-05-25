@@ -6,7 +6,7 @@ export default function appendAppImport(_plop: NodePlopAPI): ActionType {
   return {
     type: 'append',
     path: 'src/modules/app/app.module.ts',
-    pattern: /\<import \/\>/,
+    pattern: /\/\/ \<imports\>/,
     unique: true,
     templateFile: `${TEMPLATE_DIR}/app-import.hbs`,
   };

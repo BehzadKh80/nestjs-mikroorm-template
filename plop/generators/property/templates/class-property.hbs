@@ -1,4 +1,4 @@
-  
+  // <property name="{{camelCase name}}">
   {{#if swagger}}
   @ApiProperty{{#if nullable}}Optional{{/if}}({
     name: '{{snakeCase name}}',
@@ -166,3 +166,4 @@
     {{/if}}
   {{/if}}
   {{camelCase name}}{{#if nullable}}?{{else}}!{{/if}}: {{#if (eq type 'enum')}}{{pascalCase enumName}}{{else}}{{dbType2Ts type}}{{/if}}{{#if array}}[]{{/if}};
+  // </property>
