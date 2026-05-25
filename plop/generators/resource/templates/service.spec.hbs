@@ -48,6 +48,13 @@ import { {{pascalCase name}}Repository } from '../repositories/{{kebabCase name}
 // </import>
 // </imports>
 
+function buildCreateDto(): Partial<{{pascalCase name}}> {
+  return {
+    // <fixture>
+    // </fixture>
+  };
+}
+
 describe('{{pascalCase name}}Service', () => {
   let orm: MikroORM;
   let service: {{pascalCase name}}Service;
@@ -153,7 +160,7 @@ describe('{{pascalCase name}}Service', () => {
   // <function name="create">
   describe('create', () => {
     it('persists a new {{camelCase name}} and returns it with a generated id', async () => {
-      const result = await service.create({} as never);
+      const result = await service.create(buildCreateDto() as never);
 
       expect(result).toBeDefined();
       expect(result.id).toEqual(expect.any(String));
@@ -175,8 +182,8 @@ describe('{{pascalCase name}}Service', () => {
     });
 
     it('returns every persisted {{camelCase name}}', async () => {
-      await service.create({} as never);
-      await service.create({} as never);
+      await service.create(buildCreateDto() as never);
+      await service.create(buildCreateDto() as never);
 
       const result = await service.findAll();
       expect(result).toHaveLength(2);
@@ -187,7 +194,7 @@ describe('{{pascalCase name}}Service', () => {
   // <function name="findOne">
   describe('findOne', () => {
     it('returns the {{camelCase name}} when it exists', async () => {
-      const created = await service.create({} as never);
+      const created = await service.create(buildCreateDto() as never);
 
       const result = await service.findOne(created.id);
       expect(result.id).toBe(created.id);
@@ -204,9 +211,9 @@ describe('{{pascalCase name}}Service', () => {
   // <function name="update">
   describe('update', () => {
     it('returns the same {{camelCase name}} when the update payload is empty', async () => {
-      const created = await service.create({} as never);
+      const created = await service.create(buildCreateDto() as never);
 
-      const result = await service.update(created.id, {} as never);
+      const result = await service.update(created.id, buildCreateDto() as never);
       expect(result.id).toBe(created.id);
     });
 
@@ -214,7 +221,7 @@ describe('{{pascalCase name}}Service', () => {
       await expect(
         service.update(
           '00000000-0000-0000-0000-000000000000',
-          {} as never,
+          buildCreateDto() as never,
         ),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
@@ -224,7 +231,7 @@ describe('{{pascalCase name}}Service', () => {
   // <function name="remove">
   describe('remove', () => {
     it('removes an existing {{camelCase name}}', async () => {
-      const created = await service.create({} as never);
+      const created = await service.create(buildCreateDto() as never);
 
       await service.remove(created.id);
 
