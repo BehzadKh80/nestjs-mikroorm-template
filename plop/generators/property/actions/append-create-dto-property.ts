@@ -6,10 +6,9 @@ export default function appendCreateDtoProperty(
   _plop: NodePlopAPI,
 ): ActionType {
   return {
-    type: 'append',
+    type: 'modify',
     path: 'src/modules/{{kebabCase moduleName}}/dto/create-{{kebabCase entityName}}.dto.ts',
-    pattern: /\/\/ \<properties\>/,
-    unique: true,
+    pattern: /^(?=\s*\/\/ \<\/properties\>)/m,
     templateFile: `${TEMPLATE_DIR}/create-dto-property.hbs`,
   };
 }

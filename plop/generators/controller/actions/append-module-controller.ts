@@ -6,10 +6,9 @@ export default function appendModuleController(
   _plop: NodePlopAPI,
 ): ActionType {
   return {
-    type: 'append',
+    type: 'modify',
     path: 'src/modules/{{kebabCase moduleName}}/{{kebabCase moduleName}}.module.ts',
-    pattern: /\/\/ \<controllers\>/,
-    unique: true,
+    pattern: /^(?=\s*\/\/ \<\/controllers\>)/m,
     templateFile: `${TEMPLATE_DIR}/module-controller.hbs`,
   };
 }

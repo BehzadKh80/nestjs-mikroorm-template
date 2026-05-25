@@ -39,6 +39,8 @@ export class {{pascalCase name}}Controller {
 
   {{#if genCRUD}}
   // <routes>
+  
+  // <route name="create">
   @ApiCreatedResponse({
     type: Create{{pascalCase name}}Response,
   })
@@ -49,7 +51,9 @@ export class {{pascalCase name}}Controller {
     const data = await this.{{camelCase name}}Service.create(create{{pascalCase name}}Dto);
     return new Create{{pascalCase name}}Response(data);
   }
+  // </route>
 
+  // <route name="findAll">
   @ApiOkResponse({
     type: List{{pascalCase name}}Response,
   })
@@ -58,7 +62,9 @@ export class {{pascalCase name}}Controller {
     const data = await this.{{camelCase name}}Service.findAll();
     return new List{{pascalCase name}}Response(data);
   }
+  // </route>
 
+  // <route name="findOne">
   @ApiOkResponse({
     type: Detail{{pascalCase name}}Response,
   })
@@ -67,7 +73,9 @@ export class {{pascalCase name}}Controller {
     const data = await this.{{camelCase name}}Service.findOne(id);
     return new Detail{{pascalCase name}}Response(data);
   }
+  // </route>
 
+  // <route name="update">
   @ApiResponse({
     type: Update{{pascalCase name}}Response,
   })
@@ -79,7 +87,9 @@ export class {{pascalCase name}}Controller {
     const data = await this.{{camelCase name}}Service.update(id, update{{pascalCase name}}Dto);
     return new Update{{pascalCase name}}Response(data);
   }
+  // </route>
 
+  // <route name="remove">
   @ApiResponse({
     type: Delete{{pascalCase name}}Response,
   })
@@ -88,6 +98,7 @@ export class {{pascalCase name}}Controller {
     await this.{{camelCase name}}Service.remove(id);
     return new Delete{{pascalCase name}}Response({});
   }
+  // </route>
   // </routes>
   {{/if}}
 }
