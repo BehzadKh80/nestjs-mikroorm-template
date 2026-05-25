@@ -5,6 +5,7 @@ import actionTypes from './plop/action-types';
 import moduleGenerator from './plop/generators/module';
 import rmModuleGenerator from './plop/generators/rm-module';
 import controllerGenerator from './plop/generators/controller';
+import rmControllerGeneator from './plop/generators/rm-controller';
 import serviceGenerator from './plop/generators/service';
 import providerGenerator from './plop/generators/provider';
 import resourceGenerator from './plop/generators/resource';
@@ -18,6 +19,7 @@ const generators: ((plop: NodePlopAPI) => void)[] = [
   serviceGenerator,
   providerGenerator,
   controllerGenerator,
+  rmControllerGeneator,
 ];
 
 export default async function (plop: NodePlopAPI) {
