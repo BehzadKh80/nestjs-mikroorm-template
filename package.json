@@ -78,6 +78,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.6.0",
     "npm-check-updates": "^22.2.0",
+    "pg-mem": "^3.0.14",
     "plop": "^4.0.5",
     "prettier": "^3.8.3",
     "source-map-support": "^0.5.21",

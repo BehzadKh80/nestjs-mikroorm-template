@@ -1,19 +1,198 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { describe, beforeEach, it, expect } from 'vitest';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
+// <imports>
+// <import name="{{pascalCase name}}Controller">
 import { {{pascalCase name}}Controller } from './{{kebabCase name}}.controller';
+// </import>
+// <import name="{{pascalCase name}}Service">
+import { {{pascalCase name}}Service } from '../services/{{kebabCase name}}.service';
+// </import>
+{{#if genCRUD}}
+// <import name="{{pascalCase name}}">
+import { {{pascalCase name}} } from '../domains/{{kebabCase name}}';
+// </import>
+// <import name="Create{{pascalCase name}}Response">
+import { Create{{pascalCase name}}Response } from '../responses/create-{{kebabCase name}}.response';
+// </import>
+// <import name="List{{pascalCase name}}Response">
+import { List{{pascalCase name}}Response } from '../responses/list-{{kebabCase name}}.response';
+// </import>
+// <import name="Detail{{pascalCase name}}Response">
+import { Detail{{pascalCase name}}Response } from '../responses/detail-{{kebabCase name}}.response';
+// </import>
+// <import name="Update{{pascalCase name}}Response">
+import { Update{{pascalCase name}}Response } from '../responses/update-{{kebabCase name}}.response';
+// </import>
+// <import name="Delete{{pascalCase name}}Response">
+import { Delete{{pascalCase name}}Response } from '../responses/delete-{{kebabCase name}}.response';
+// </import>
+{{/if}}
+// </imports>
+
+{{#if genCRUD}}
+function build{{pascalCase name}}(
+  id = '00000000-0000-0000-0000-000000000001',
+): {{pascalCase name}} {
+  const entity = new {{pascalCase name}}();
+  entity.id = id;
+  entity.createdAt = new Date('2026-01-01T00:00:00Z');
+  entity.updatedAt = new Date('2026-01-01T00:00:00Z');
+  return entity;
+}
+{{/if}}
 
 describe('{{pascalCase name}}Controller', () => {
   let controller: {{pascalCase name}}Controller;
+  let service: Partial<
+    Record<keyof {{pascalCase name}}Service, ReturnType<typeof vi.fn>>
+  >;
 
   beforeEach(async () => {
+    service = {
+      // <mocks>
+      {{#if genCRUD}}
+      // <mock name="create">
+      create: vi.fn(),
+      // </mock>
+      // <mock name="findAll">
+      findAll: vi.fn(),
+      // </mock>
+      // <mock name="findOne">
+      findOne: vi.fn(),
+      // </mock>
+      // <mock name="update">
+      update: vi.fn(),
+      // </mock>
+      // <mock name="remove">
+      remove: vi.fn(),
+      // </mock>
+      {{/if}}
+      // </mocks>
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [{{pascalCase name}}Controller],
+      providers: [
+        // <providers>
+        // <provider name="{{pascalCase name}}Service">
+        { provide: {{pascalCase name}}Service, useValue: service },
+        // </provider>
+        // </providers>
+      ],
     }).compile();
 
-    controller = module.get<{{pascalCase name}}Controller>({{pascalCase name}}Controller);
+    controller = module.get<{{pascalCase name}}Controller>(
+      {{pascalCase name}}Controller,
+    );
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  {{#if genCRUD}}
+  // <routes>
+  // <route name="create">
+  describe('create', () => {
+    it('delegates to {{pascalCase name}}Service.create and wraps the result', async () => {
+      const dto = {} as never;
+      const entity = build{{pascalCase name}}();
+      service.create!.mockResolvedValue(entity);
+
+      const response = await controller.create(dto);
+
+      expect(service.create).toHaveBeenCalledExactlyOnceWith(dto);
+      expect(response).toBeInstanceOf(Create{{pascalCase name}}Response);
+      expect(response.data).toBe(entity);
+    });
+  });
+  // </route>
+
+  // <route name="findAll">
+  describe('findAll', () => {
+    it('delegates to {{pascalCase name}}Service.findAll and wraps the list', async () => {
+      const entities = [
+        build{{pascalCase name}}('a'),
+        build{{pascalCase name}}('b'),
+      ];
+      service.findAll!.mockResolvedValue(entities);
+
+      const response = await controller.findAll();
+
+      expect(service.findAll).toHaveBeenCalledExactlyOnceWith();
+      expect(response).toBeInstanceOf(List{{pascalCase name}}Response);
+      expect(response.data).toBe(entities);
+    });
+
+    it('returns an empty list when the service returns nothing', async () => {
+      service.findAll!.mockResolvedValue([]);
+
+      const response = await controller.findAll();
+
+      expect(response).toBeInstanceOf(List{{pascalCase name}}Response);
+      expect(response.data).toEqual([]);
+    });
+  });
+  // </route>
+
+  // <route name="findOne">
+  describe('findOne', () => {
+    it('passes the id through and wraps the result', async () => {
+      const entity = build{{pascalCase name}}('abc');
+      service.findOne!.mockResolvedValue(entity);
+
+      const response = await controller.findOne('abc');
+
+      expect(service.findOne).toHaveBeenCalledExactlyOnceWith('abc');
+      expect(response).toBeInstanceOf(Detail{{pascalCase name}}Response);
+      expect(response.data).toBe(entity);
+    });
+
+    it('propagates errors thrown by the service', async () => {
+      const error = new Error('not found');
+      service.findOne!.mockRejectedValue(error);
+
+      await expect(controller.findOne('missing')).rejects.toBe(error);
+    });
+  });
+  // </route>
+
+  // <route name="update">
+  describe('update', () => {
+    it('forwards the id and dto and wraps the result', async () => {
+      const dto = {} as never;
+      const entity = build{{pascalCase name}}('xyz');
+      service.update!.mockResolvedValue(entity);
+
+      const response = await controller.update('xyz', dto);
+
+      expect(service.update).toHaveBeenCalledExactlyOnceWith('xyz', dto);
+      expect(response).toBeInstanceOf(Update{{pascalCase name}}Response);
+      expect(response.data).toBe(entity);
+    });
+  });
+  // </route>
+
+  // <route name="remove">
+  describe('remove', () => {
+    it('calls {{pascalCase name}}Service.remove and returns a Delete{{pascalCase name}}Response', async () => {
+      service.remove!.mockResolvedValue(undefined);
+
+      const response = await controller.remove('to-delete');
+
+      expect(service.remove).toHaveBeenCalledExactlyOnceWith('to-delete');
+      expect(response).toBeInstanceOf(Delete{{pascalCase name}}Response);
+      expect(response.data).toBeDefined();
+    });
+
+    it('propagates errors thrown by the service', async () => {
+      const error = new Error('not found');
+      service.remove!.mockRejectedValue(error);
+
+      await expect(controller.remove('missing')).rejects.toBe(error);
+    });
+  });
+  // </route>
+  // </routes>
+  {{/if}}
 });
