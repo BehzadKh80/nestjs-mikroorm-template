@@ -9,12 +9,7 @@ import isNumberType from './is-number-type';
 import isIntegerType from './is-integer-type';
 import format2Swagger from './format-to-swagger';
 import isSelectableFormat from './is-selectable-format';
-import logicalEqual from './eq';
-import logicalNotEqual from './neq';
-import logicalAnd from './and';
-import logicalOr from './or';
-import logicalGreaterThan from './gt';
-import logicalGreaterThanOrEqual from './gte';
+import operators from './operators';
 
 const helpers: ((plop: NodePlopAPI) => void)[] = [
   isNumberType,
@@ -23,12 +18,7 @@ const helpers: ((plop: NodePlopAPI) => void)[] = [
   isDbStringType,
   isDbLength,
   dbType2Ts,
-  logicalEqual,
-  logicalNotEqual,
-  logicalAnd,
-  logicalOr,
-  logicalGreaterThan,
-  logicalGreaterThanOrEqual,
+  ...operators,
   isIntegerType,
   isStringType,
   isDateType,
