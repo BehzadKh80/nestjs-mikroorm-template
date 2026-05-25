@@ -6,7 +6,7 @@ import { DATABASE_CONFIG_PROVIDER } from './resources/database-resource';
 import { LOG_CONFIG_PROVIDER } from './resources/log-resource';
 import { REDIS_CONFIG_PROVIDER } from './resources/redis-resource';
 import { SECURITY_CONFIG_PROVIDER } from './resources/security-resource';
-const configModuleOptions: ConfigModuleOptions = {
+export const configModuleOptions: ConfigModuleOptions = {
   isGlobal: true,
   load: [
     APP_CONFIG_PROVIDER,
@@ -18,5 +18,3 @@ const configModuleOptions: ConfigModuleOptions = {
     SWAGGER_CONFIG_PROVIDER,
   ],
 };
-
-export default configModuleOptions;

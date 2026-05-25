@@ -4,10 +4,9 @@ import { TEMPLATE_DIR } from '../constants';
 
 export default function appendModuleProvider(_plop: NodePlopAPI): ActionType {
   return {
-    type: 'append',
+    type: 'modify',
     path: 'src/modules/{{kebabCase moduleName}}/{{kebabCase moduleName}}.module.ts',
-    pattern: /\<provider \/\>/,
-    unique: true,
+    pattern: /^(?=\s*\/\/ \<\/providers\>)/m,
     templateFile: `${TEMPLATE_DIR}/module-provider.hbs`,
   };
 }

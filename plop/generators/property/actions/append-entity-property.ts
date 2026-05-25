@@ -4,10 +4,9 @@ import { ENTITY_PATH, TEMPLATE_DIR } from '../constants';
 
 export default function appendEntityProperty(_plop: NodePlopAPI): ActionType {
   return {
-    type: 'append',
+    type: 'modify',
     path: ENTITY_PATH,
-    pattern: /\<entity-property \/\>/,
-    unique: true,
+    pattern: /^(?=\s*\/\/ \<\/properties\>)/m,
     templateFile: `${TEMPLATE_DIR}/entity-property.hbs`,
   };
 }

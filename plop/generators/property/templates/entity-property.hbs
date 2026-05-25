@@ -1,3 +1,5 @@
+
+    // <property name="{{camelCase name}}">
     {{camelCase name}}: p
     {{#if (eq type 'enum')}}
     .string()
@@ -29,3 +31,4 @@
         {{#if (isDbStringType type)}}"{{/if}}{{default}}{{#if (isDbStringType type)}}"{{/if}}
     )
     {{/if}},
+    // </property>
