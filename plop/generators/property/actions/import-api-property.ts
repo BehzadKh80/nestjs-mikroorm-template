@@ -8,15 +8,7 @@ export default function importApiProperty(_plop: NodePlopAPI): ActionType {
     data: {
       path: DOMAIN_PATH,
       importName: 'ApiProperty',
-      from: '@nestjs/swagger',
-    },
-    skip: (answers: Record<string, any>) => {
-      if (!answers.swagger) {
-        return 'ApiProperty - swagger is disabled';
-      }
-      if (answers.nullable) {
-        return 'ApiProperty - property is optional';
-      }
+      from: 'src/common/decorators/api-property.decorator.ts',
     },
   };
 }

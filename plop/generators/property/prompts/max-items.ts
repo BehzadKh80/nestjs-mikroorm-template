@@ -15,6 +15,6 @@ export default function maxItemsPrompt(_plop: NodePlopAPI): PromptQuestion {
       }
       return false;
     },
-    default: 0,
+    default: -1,
   };
 }
