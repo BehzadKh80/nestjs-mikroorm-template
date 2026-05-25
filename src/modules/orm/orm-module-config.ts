@@ -115,7 +115,7 @@ export function createConfig(common: {
     // namingStrategy: EntityCaseNamingStrategy,
 
     extensions: [Migrator],
-    allowGlobalContext: Boolean(process.env['ORM_GLOBAL_CONTEXT']) ?? false,
+    allowGlobalContext: Boolean(process.env['ORM_GLOBAL_CONTEXT']),
   };
 
   return options;

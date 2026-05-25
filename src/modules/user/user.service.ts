@@ -22,7 +22,7 @@ export class UserService {
     if (exist) {
       this.logger.warn(
         {
-          requestId: this.clsService.get('requestId'),
+          requestId: this.clsService.get<string>('requestId'),
         },
         'some user exists',
       );
