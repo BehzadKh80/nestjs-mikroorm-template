@@ -3,6 +3,7 @@ import type { NodePlopAPI } from 'plop';
 import helpers from './plop/helpers';
 import actionTypes from './plop/action-types';
 import moduleGenerator from './plop/generators/module';
+import rmModuleGenerator from './plop/generators/rm-module';
 import controllerGenerator from './plop/generators/controller';
 import serviceGenerator from './plop/generators/service';
 import providerGenerator from './plop/generators/provider';
@@ -13,6 +14,7 @@ const generators: ((plop: NodePlopAPI) => void)[] = [
   resourceGenerator,
   propertyGenerator,
   moduleGenerator,
+  rmModuleGenerator,
   serviceGenerator,
   providerGenerator,
   controllerGenerator,
