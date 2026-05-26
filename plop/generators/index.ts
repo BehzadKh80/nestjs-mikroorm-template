@@ -10,6 +10,7 @@ import rmProviderGenerator from './rm-provider';
 import resourceGenerator from './resource';
 import propertyGenerator from './property';
 import rmPropertyGenerator from './rm-property';
+import dependencyGenerator from './dependency';
 
 const generators: ((plop: NodePlopAPI) => void)[] = [
   resourceGenerator,
@@ -23,6 +24,7 @@ const generators: ((plop: NodePlopAPI) => void)[] = [
   rmControllerGeneator,
   providerGenerator,
   rmProviderGenerator,
+  dependencyGenerator,
 ];
 
 export default generators;
