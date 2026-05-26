@@ -1,4 +1,4 @@
-import { existsSync, readdirSync } from 'fs';
+import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { IGNORE_MODULES, MODULES_DIR } from './constants';
 export function listModules(): string[] {
@@ -42,4 +42,28 @@ export function listProviders(module: string): string[] {
     .filter((name) => !name.endsWith('.spec.ts'))
     .map((name) => name.replaceAll('.ts', ''))
     .sort();
+}
+
+export function listEntities(module: string): string[] {
+  const entitiesPath = join(MODULES_DIR, module, 'entities');
+  if (!existsSync(entitiesPath)) return [];
+  return readdirSync(entitiesPath, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && !IGNORE_MODULES.includes(entry.name))
+    .map((entry) => entry.name)
+    .filter((name) => name.endsWith('.entity.ts'))
+    .map((name) => name.replaceAll('.entity.ts', ''))
+    .sort();
+}
+
+export function listProperties(module: string, entity: string): string[] {
+  const domainPath = join(MODULES_DIR, module, 'domains', `${entity}.ts`);
+  if (!existsSync(domainPath)) return [];
+  const content = readFileSync(domainPath, 'utf8');
+  const names = new Set<string>();
+  const pattern = /\/\/ <property name="([^"]+)">/g;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(content)) !== null) {
+    names.add(match[1]);
+  }
+  return [...names].sort();
 }

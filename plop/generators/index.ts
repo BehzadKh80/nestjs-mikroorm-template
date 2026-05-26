@@ -9,10 +9,12 @@ import providerGenerator from './provider';
 import rmProviderGenerator from './rm-provider';
 import resourceGenerator from './resource';
 import propertyGenerator from './property';
+import rmPropertyGenerator from './rm-property';
 
 const generators: ((plop: NodePlopAPI) => void)[] = [
   resourceGenerator,
   propertyGenerator,
+  rmPropertyGenerator,
   moduleGenerator,
   rmModuleGenerator,
   serviceGenerator,
