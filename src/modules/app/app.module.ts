@@ -53,9 +53,6 @@ import { HashModule } from '../hash/hash.module';
 // <import name="HealthModule">
 import { HealthModule } from '../health/health.module';
 // </import>
-// <import name="UserModule">
-import { UserModule } from '../user/user.module';
-// </import>
 // </imports>
 
 @Module({
@@ -90,9 +87,6 @@ import { UserModule } from '../user/user.module';
     // </dependency>
     // <dependency name="HashModule">
     HashModule,
-    // </dependency>
-    // <dependency name="UserModule">
-    UserModule,
     // </dependency>
     // </dependencies>
   ],
