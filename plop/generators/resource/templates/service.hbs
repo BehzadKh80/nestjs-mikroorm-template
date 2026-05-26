@@ -49,7 +49,7 @@ export class {{pascalCase name}}Service {
   // <functions>
   // <function name="create">
   async create(create{{pascalCase name}}Dto: Create{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
-    const requestId = this.clsService.get('requestId');
+    const requestId = this.clsService.get<string>('requestId');
     this.logger.info({ requestId, create{{pascalCase name}}Dto }, 'Creating {{camelCase name}}');
 
     const {{camelCase name}} = this.{{camelCase name}}Repository.create(create{{pascalCase name}}Dto);
@@ -62,7 +62,7 @@ export class {{pascalCase name}}Service {
 
   // <function name="findAll">
   async findAll(): Promise<{{pascalCase name}}[]> {
-    const requestId = this.clsService.get('requestId');
+    const requestId = this.clsService.get<string>('requestId');
     this.logger.info({ requestId }, 'Fetching all {{camelCase name}}s');
 
     const {{camelCase name}}s = await this.{{camelCase name}}Repository.findAll();
@@ -74,7 +74,7 @@ export class {{pascalCase name}}Service {
   
   // <function name="findOne">
   async findOne(id: string): Promise<{{pascalCase name}}> {
-    const requestId = this.clsService.get('requestId');
+    const requestId = this.clsService.get<string>('requestId');
     this.logger.info({ requestId, id }, 'Fetching {{camelCase name}} by id');
 
     const {{camelCase name}} = await this.{{camelCase name}}Repository.findOne({ id });
@@ -91,7 +91,7 @@ export class {{pascalCase name}}Service {
   
   // <function name="update">
   async update(id: string, update{{pascalCase name}}Dto: Update{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
-    const requestId = this.clsService.get('requestId');
+    const requestId = this.clsService.get<string>('requestId');
     this.logger.info({ requestId, id, update{{pascalCase name}}Dto }, 'Updating {{camelCase name}}');
 
     const {{camelCase name}} = await this.findOne(id);
@@ -105,7 +105,7 @@ export class {{pascalCase name}}Service {
   
   // <function name="remove">
   async remove(id: string): Promise<void> {
-    const requestId = this.clsService.get('requestId');
+    const requestId = this.clsService.get<string>('requestId');
     this.logger.info({ requestId, id }, 'Removing {{camelCase name}}');
 
     const {{camelCase name}} = await this.findOne(id);
