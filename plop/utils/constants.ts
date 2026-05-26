@@ -12,5 +12,4 @@ export const IGNORE_MODULES = [
   'orm',
   'redis',
   'serve-static',
-  'user',
 ];

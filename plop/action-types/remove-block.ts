@@ -5,8 +5,8 @@ import { resolve } from 'path';
 export default function removeBlockAction(plop: NodePlopAPI) {
   plop.setActionType('removeBlock', (answers, config, plop) => {
     const data: any = config?.data;
-
-    const filePath = resolve(plop.renderString(data.path, answers));
+    const renderedPath = plop.renderString(data.path, answers);
+    const filePath = resolve(renderedPath);
     const tag = plop.renderString(data.tag, answers);
     const name = plop.renderString(data.name, answers);
 
@@ -24,10 +24,10 @@ export default function removeBlockAction(plop: NodePlopAPI) {
 
     const content = readFileSync(filePath, 'utf8');
     if (!pattern.test(content)) {
-      return `<${tag} name="${name}"> not found in ${data.path} — skipped`;
+      return `<${tag} name="${name}"> not found in ${renderedPath} — skipped`;
     }
 
     writeFileSync(filePath, content.replace(pattern, ''), 'utf8');
-    return `Removed <${tag} name="${name}"> from ${data.path}`;
+    return `Removed <${tag} name="${name}"> from ${renderedPath}`;
   });
 }
