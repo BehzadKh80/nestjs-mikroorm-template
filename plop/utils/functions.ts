@@ -44,6 +44,17 @@ export function listProviders(module: string): string[] {
     .sort();
 }
 
+export function listGuards(module: string): string[] {
+  const guardsPath = join(MODULES_DIR, module, 'guards');
+  if (!existsSync(guardsPath)) return [];
+  return readdirSync(guardsPath, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && !IGNORE_MODULES.includes(entry.name))
+    .map((entry) => entry.name)
+    .filter((name) => name.endsWith('.guard.ts'))
+    .map((name) => name.replaceAll('.guard.ts', ''))
+    .sort();
+}
+
 export function listEntities(module: string): string[] {
   const entitiesPath = join(MODULES_DIR, module, 'entities');
   if (!existsSync(entitiesPath)) return [];

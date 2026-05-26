@@ -1,0 +1,19 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { describe, beforeEach, it, expect } from 'vitest';
+import { {{pascalCase name}}Guard } from './{{kebabCase name}}.guard';
+
+describe('{{pascalCase name}}Guard', () => {
+  let guard: {{pascalCase name}}Guard;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [{{pascalCase name}}Guard],
+    }).compile();
+
+    guard = module.get<{{pascalCase name}}Guard>({{pascalCase name}}Guard);
+  });
+
+  it('should be defined', () => {
+    expect(guard).toBeDefined();
+  });
+});
