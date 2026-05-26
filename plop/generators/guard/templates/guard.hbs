@@ -1,0 +1,23 @@
+// <imports>
+// <import name="CanActivate">
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+// </import>
+// </imports>
+
+@Injectable()
+export class {{pascalCase name}}Guard implements CanActivate {
+  constructor(
+    // <properties>
+    // </properties>
+  ) {}
+
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> {
+    void context;
+    return true;
+  }
+
+  // <functions>
+  // </functions>
+}
