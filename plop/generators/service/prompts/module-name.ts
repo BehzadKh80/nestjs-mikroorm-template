@@ -1,10 +1,12 @@
 import type { NodePlopAPI } from 'plop';
 import { PromptQuestion } from '../../types/prompt-question';
+import { listModules } from '../../../utils/functions';
 
 export default function moduleNamePrompt(_plop: NodePlopAPI): PromptQuestion {
   return {
-    type: 'input',
+    type: 'list',
     name: 'moduleName',
     message: 'module name:',
+    choices: listModules(),
   };
 }

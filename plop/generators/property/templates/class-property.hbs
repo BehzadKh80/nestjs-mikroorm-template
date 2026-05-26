@@ -1,172 +1,52 @@
   // <property name="{{camelCase name}}">
-  {{#if swagger}}
-  @ApiProperty{{#if nullable}}Optional{{/if}}({
-    name: '{{snakeCase name}}',
+  @ApiProperty({
+    name: '{{camelCase name}}',
+    type: '{{type}}',
     {{#if (eq type 'enum')}}
-    type: 'string',
-    enum: {{pascalCase enumName}}
+    enum: {{pascalCase enumName}},
     {{/if}}
-    {{#if addValidator}}
-      {{#if ( or (or (eq type 'string') (eq type 'text')) (eq type 'character') )}}
-    type: 'string',
-        {{#if (and (neq format 'skip') (format2Swagger format))}}
-    format: '{{format2Swagger format}}',
-        {{/if}}
-        {{#if (and (gt minLength 0) (neq type 'character'))}}
-    minLength: {{minLength}},
-        {{/if}}
-        {{#if (gt maxLength 0)}}
-          {{#if (and (eq type 'character'))}}
-    minLength: {{maxLength}},
-          {{/if}}
-    maxLength: {{maxLength}},
-        {{/if}}
-      {{/if}}
-      {{#if (eq type 'uuid')}}
-      type: 'string',
-      format: 'uuid',
-      {{/if}}
-      {{#if (isDateType type)}}
-      type: 'string',
-      format: 'datetime',
-      {{/if}}
-      {{#if (isNumberType type) }}
-    type: '{{#if (isIntegerType type)}}integer{{else}}number{{/if}}',
-        {{#if (gte minNumber 0)}}
-    minimum: {{minNumber}},
-        {{/if}}
-        {{#if (gte maxNumber 0)}}
-    maximum: {{maxNumber}},
-        {{/if}}
-      {{/if}}
-      {{#if (eq type 'boolean')}}
-    type: 'boolean',
-      {{/if}}
+    {{#if nullable}}
+    nullable: true,
     {{/if}}
     {{#if array}}
-    isArray: true,
-      {{#if (gte maxItems 0 )}}
-    maxItems: {{maxItems}},
-      {{/if}}
-      {{#if (gte minItems 0) }}
+    array: true,
+    {{/if}}
+    {{#unless swagger}}
+    swagger: false,
+    {{/unless}}
+    {{#if addValidator}}
+    addValidator: true,
+    {{/if}}
+    {{#if (and format (neq format 'skip'))}}
+    format: '{{format}}',
+    {{/if}}
+    {{#if formatOption}}
+    formatOption: '{{formatOption}}',
+    {{/if}}
+    {{#if (gte minLength 0)}}
+    minLength: {{minLength}},
+    {{/if}}
+    {{#if (gte maxLength 0)}}
+    maxLength: {{maxLength}},
+    {{/if}}
+    {{#if (gte minNumber 0)}}
+    minNumber: {{minNumber}},
+    {{/if}}
+    {{#if (gte maxNumber 0)}}
+    maxNumber: {{maxNumber}},
+    {{/if}}
+    {{#if (gte minItems 0)}}
     minItems: {{minItems}},
-      {{/if}}
+    {{/if}}
+    {{#if (gte maxItems 0)}}
+    maxItems: {{maxItems}},
     {{/if}}
     {{#if swaggerExample}}
-    example:{{#if array}}[{{/if}}
-      {{#if (eq type 'uuid')}}
-      '{{swaggerExample}}'
-      {{/if}}
-      {{#if (isStringType type)}}
-      '{{swaggerExample}}'
-      {{/if}}
-      {{#if (eq type 'datetime')}}
-      '{{swaggerExample}}'
-      {{/if}}
-      {{#if (isNumberType type)}}
-        {{swaggerExample}}
-      {{/if}}
-      {{#if (eq type 'boolean')}}
-        {{swaggerExample}}
-      {{/if}}
-      {{#if (eq type 'enum')}}
-        {{#if (eq swaggerExample 'generate auto')}}
-        Object.values({{pascalCase enumName}}).pop()
-        {{else}}
-        {{pascalCase enumName}}.{{swaggerExample}}
-        {{/if}}
-      {{/if}}
-    {{#if array}}]{{/if}},
+    example: {{#if (eq type 'enum')}}{{#if (eq swaggerExample 'generate auto')}}Object.values({{pascalCase enumName}}).pop(){{else}}{{pascalCase enumName}}.{{swaggerExample}}{{/if}}{{/if}}{{#if (or (or (eq type 'uuid') (eq type 'datetime')) (isStringType type))}}'{{swaggerExample}}'{{/if}}{{#if (or (eq type 'boolean') (isNumberType type))}}{{swaggerExample}}{{/if}},
+    {{/if}}
+    {{#if (and (eq type 'uuid') uuidVersion (neq uuidVersion 'any'))}}
+    uuidVersion: '{{uuidVersion}}',
     {{/if}}
   })
-  {{/if}}
-  @Expose({
-    name: '{{snakeCase name}}',
-  })
-  {{#if addValidator}}
-    {{#if nullable}}
-  @IsOptional({
-    {{#if array}}each: true{{/if}}
-  })
-    {{else}}
-  @IsNotEmpty({
-    {{#if array}}each: true{{/if}}
-  })
-    {{/if}}
-    {{#if array}}
-  @IsArray()
-      {{#if (gte minItems 0)}}
-  @ArrayMinSize({{minItems}})
-      {{/if}}
-      {{#if (gte maxItems 0)}}
-  @ArrayMaxSize({{maxItems}})
-      {{/if}}
-    {{/if}}
-    {{#if (eq type 'enum')}}
-  @IsEnum({{pascalCase enumName}}, {
-    {{#if array}}each: true{{/if}}
-  })
-    {{/if}}
-    {{#if (eq type 'boolean')}}
-  @IsBoolean({
-    {{#if array}}each: true{{/if}}
-  })
-    {{/if}}
-    {{#if (isNumberType type) }}
-  @IsNumber({}, {
-    {{#if array}}each: true{{/if}}
-  })
-      {{#if (gte minNumber 0)}}
-  @Min({{minNumber}}, {
-    {{#if array}}each: true{{/if}}
-  })
-      {{/if}}
-      {{#if (gte maxNumber 0)}}
-  @Max({{maxNumber}}, {
-    {{#if array}}each: true{{/if}}
-  })
-      {{/if}}
-    {{/if}}
-    {{#if ( or (or (eq type 'string') (eq type 'text')) (eq type 'character') )}}
-  @IsString({
-    {{#if array}}each: true{{/if}}
-  })
-      {{#if (neq format 'skip')}}
-  @Is{{format}}(
-  {{#if (isSelectableFormat format)}}
-    {{formatOption}}
-  ,
-  {{/if}}
-  {
-    {{#if array}}each: true{{/if}}
-  })
-      {{/if}}
-      {{#if (and (gte minLength 0) (neq type 'character'))}}
-  @MinLength({{minLength}}, {
-    {{#if array}}each: true{{/if}}
-  })
-      {{/if}}
-      {{#if (gte maxLength 0)}}
-        {{#if (and (eq type 'character'))}}
-  @MinLength({{maxLength}}, {
-    {{#if array}}each: true{{/if}}
-  })
-        {{/if}}
-  @MaxLength({{maxLength}}, {
-    {{#if array}}each: true{{/if}}
-  })
-      {{/if}}
-    {{/if}}
-    {{#if (isDateType type)}}
-  @IsDate({
-    {{#if array}}each: true{{/if}}
-  })
-    {{/if}}
-    {{#if (eq type 'uuid')}}
-  @IsUUID({{#if (neq uuidVersion 'any')}}{{uuidVersion}}{{/if}}, {
-    {{#if array}}each: true{{/if}}
-  })
-    {{/if}}
-  {{/if}}
   {{camelCase name}}{{#if nullable}}?{{else}}!{{/if}}: {{#if (eq type 'enum')}}{{pascalCase enumName}}{{else}}{{dbType2Ts type}}{{/if}}{{#if array}}[]{{/if}};
   // </property>

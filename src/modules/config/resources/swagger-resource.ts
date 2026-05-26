@@ -10,7 +10,7 @@ export class SwaggerConfig {
   enable!: boolean;
 
   @Expose({ name: 'SWAGGER__PATH' })
-  @Transform(({ value }) => value ?? 'docs')
+  @Transform(({ value }): any => value ?? 'docs')
   @IsString()
   path!: string;
 }

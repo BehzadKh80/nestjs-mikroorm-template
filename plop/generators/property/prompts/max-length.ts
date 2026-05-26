@@ -17,6 +17,6 @@ export default function maxLengthPrompt(_plop: NodePlopAPI): PromptQuestion {
       }
       return false;
     },
-    default: 0,
+    default: -1,
   };
 }

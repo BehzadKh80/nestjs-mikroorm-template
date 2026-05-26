@@ -1,0 +1,3 @@
+    // <property name="{{camelCase propertyName}}">
+    private readonly {{camelCase propertyName}}: {{#if (eq depKind 'service')}}{{pascalCase depName}}Service{{/if}}{{#if (eq depKind 'provider')}}{{pascalCase depName}}{{/if}},
+    // </property>

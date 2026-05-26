@@ -1,0 +1,5 @@
+  // <fixture-property name="{{camelCase name}}">
+  {{#if swaggerExample}}
+  entity.{{camelCase name}} = {{#if array}}[{{/if}}{{#if (eq type 'enum')}}{{#if (eq swaggerExample 'generate auto')}}Object.values({{pascalCase enumName}}).pop()!{{else}}{{pascalCase enumName}}.{{swaggerExample}}{{/if}}{{/if}}{{#if (or (or (eq type 'uuid') (eq type 'datetime')) (isStringType type))}}'{{swaggerExample}}'{{/if}}{{#if (or (eq type 'boolean') (isNumberType type))}}{{swaggerExample}}{{/if}}{{#if array}}]{{/if}};
+  {{/if}}
+  // </fixture-property>
