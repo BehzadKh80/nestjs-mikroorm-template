@@ -1,0 +1,19 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { describe, beforeEach, it, expect } from 'vitest';
+import { {{pascalCase name}}Middleware } from './{{kebabCase name}}.middleware';
+
+describe('{{pascalCase name}}Middleware', () => {
+  let middleware: {{pascalCase name}}Middleware;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [{{pascalCase name}}Middleware],
+    }).compile();
+
+    middleware = module.get<{{pascalCase name}}Middleware>({{pascalCase name}}Middleware);
+  });
+
+  it('should be defined', () => {
+    expect(middleware).toBeDefined();
+  });
+});

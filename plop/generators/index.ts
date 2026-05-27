@@ -9,6 +9,8 @@ import providerGenerator from './provider';
 import rmProviderGenerator from './rm-provider';
 import guardGenerator from './guard';
 import rmGuardGenerator from './rm-guard';
+import middlewareGenerator from './middleware';
+import rmMiddlewareGenerator from './rm-middleware';
 import resourceGenerator from './resource';
 import propertyGenerator from './property';
 import rmPropertyGenerator from './rm-property';
@@ -29,6 +31,8 @@ const generators: ((plop: NodePlopAPI) => void)[] = [
   rmProviderGenerator,
   guardGenerator,
   rmGuardGenerator,
+  middlewareGenerator,
+  rmMiddlewareGenerator,
   dependencyGenerator,
   renameGenerator,
 ];

@@ -1,0 +1,25 @@
+// <imports>
+// <import name="NestMiddleware">
+import { Injectable, NestMiddleware } from '@nestjs/common';
+// </import>
+// <import name="express">
+import { Request, Response, NextFunction } from 'express';
+// </import>
+// </imports>
+
+@Injectable()
+export class {{pascalCase name}}Middleware implements NestMiddleware {
+  constructor(
+    // <properties>
+    // </properties>
+  ) {}
+
+  use(req: Request, res: Response, next: NextFunction): void {
+    void req;
+    void res;
+    next();
+  }
+
+  // <functions>
+  // </functions>
+}

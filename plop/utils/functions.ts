@@ -55,6 +55,17 @@ export function listGuards(module: string): string[] {
     .sort();
 }
 
+export function listMiddlewares(module: string): string[] {
+  const middlewaresPath = join(MODULES_DIR, module, 'middlewares');
+  if (!existsSync(middlewaresPath)) return [];
+  return readdirSync(middlewaresPath, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && !IGNORE_MODULES.includes(entry.name))
+    .map((entry) => entry.name)
+    .filter((name) => name.endsWith('.middleware.ts'))
+    .map((name) => name.replaceAll('.middleware.ts', ''))
+    .sort();
+}
+
 export function listEntities(module: string): string[] {
   const entitiesPath = join(MODULES_DIR, module, 'entities');
   if (!existsSync(entitiesPath)) return [];
