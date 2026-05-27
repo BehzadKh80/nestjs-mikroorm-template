@@ -1,0 +1,19 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { describe, beforeEach, it, expect } from 'vitest';
+import { {{pascalCase name}}Pipe } from './{{kebabCase name}}.pipe';
+
+describe('{{pascalCase name}}Pipe', () => {
+  let pipe: {{pascalCase name}}Pipe;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [{{pascalCase name}}Pipe],
+    }).compile();
+
+    pipe = module.get<{{pascalCase name}}Pipe>({{pascalCase name}}Pipe);
+  });
+
+  it('should be defined', () => {
+    expect(pipe).toBeDefined();
+  });
+});

@@ -66,6 +66,17 @@ export function listMiddlewares(module: string): string[] {
     .sort();
 }
 
+export function listPipes(module: string): string[] {
+  const pipesPath = join(MODULES_DIR, module, 'pipes');
+  if (!existsSync(pipesPath)) return [];
+  return readdirSync(pipesPath, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && !IGNORE_MODULES.includes(entry.name))
+    .map((entry) => entry.name)
+    .filter((name) => name.endsWith('.pipe.ts'))
+    .map((name) => name.replaceAll('.pipe.ts', ''))
+    .sort();
+}
+
 export function listEntities(module: string): string[] {
   const entitiesPath = join(MODULES_DIR, module, 'entities');
   if (!existsSync(entitiesPath)) return [];
