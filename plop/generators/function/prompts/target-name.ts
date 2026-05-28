@@ -1,7 +1,6 @@
 import type { NodePlopAPI } from 'plop';
 import { PromptQuestion } from '../../types/prompt-question';
 import {
-  listControllers,
   listGuards,
   listMiddlewares,
   listPipes,
@@ -13,26 +12,20 @@ export default function targetNamePrompt(plop: NodePlopAPI): PromptQuestion {
   return {
     type: 'list',
     name: 'targetName',
-    message: 'target name:',
-    when: (answers) => answers.target !== 'module',
+    message: (answers) => `${answers.target} name:`,
     choices: (answers) => {
-      const moduleName = plop.renderString(
-        '{{kebabCase moduleName}}',
-        answers,
-      );
+      const module = plop.renderString('{{kebabCase moduleName}}', answers);
       switch (answers.target) {
-        case 'controller':
-          return listControllers(moduleName);
         case 'service':
-          return listServices(moduleName);
+          return listServices(module);
         case 'provider':
-          return listProviders(moduleName);
+          return listProviders(module);
         case 'guard':
-          return listGuards(moduleName);
+          return listGuards(module);
         case 'middleware':
-          return listMiddlewares(moduleName);
+          return listMiddlewares(module);
         case 'pipe':
-          return listPipes(moduleName);
+          return listPipes(module);
         default:
           return [];
       }

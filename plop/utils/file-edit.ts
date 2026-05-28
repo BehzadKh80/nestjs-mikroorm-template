@@ -113,6 +113,68 @@ export function removeTaggedBlockByName(
   return true;
 }
 
+export type BlockCleanupResult = {
+  removed: boolean;
+  cleanedImports: string[];
+};
+
+function isSymbolUsedOutsideImports(content: string, sym: string): boolean {
+  let stripped = content.replace(
+    /[ \t]*\/\/ <import name="[^"]+">[\s\S]*?[ \t]*\/\/ <\/import>\n?/g,
+    '',
+  );
+  stripped = stripped.replace(
+    /^import\s*(?:type\s*)?\{[^}]*\}\s*from\s*['"][^'"]+['"];?\s*\n?/gm,
+    '',
+  );
+  return new RegExp(`\\b${escapeRe(sym)}\\b`).test(stripped);
+}
+
+export function removeBlockAndCleanupImports(
+  filePath: string,
+  tag: string,
+  name: string,
+): BlockCleanupResult {
+  if (!existsSync(filePath)) return { removed: false, cleanedImports: [] };
+
+  const escTag = escapeRe(tag);
+  const escName = escapeRe(name);
+  const blockRe = new RegExp(
+    `[ \\t]*\\/\\/ <${escTag} name="${escName}">([\\s\\S]*?)[ \\t]*\\/\\/ <\\/${escTag}>\\n?`,
+  );
+
+  const content = readFileSync(filePath, 'utf8');
+  const match = content.match(blockRe);
+  if (!match) return { removed: false, cleanedImports: [] };
+
+  const blockBody = match[1] ?? '';
+  writeFileSync(filePath, content.replace(blockRe, ''), 'utf8');
+
+  const ident = /\b([A-Z][A-Za-z0-9_]*)\b/g;
+  const candidates = new Set<string>();
+  let m: RegExpExecArray | null;
+  while ((m = ident.exec(blockBody)) !== null) {
+    candidates.add(m[1]);
+  }
+
+  const cleanedImports: string[] = [];
+  for (const sym of candidates) {
+    const current = readFileSync(filePath, 'utf8');
+    if (isSymbolUsedOutsideImports(current, sym)) continue;
+
+    if (removeTaggedBlockByName(filePath, 'import', sym)) {
+      cleanedImports.push(sym);
+      continue;
+    }
+
+    if (removeUnusedImportFromFile(filePath, sym) === 'removed') {
+      cleanedImports.push(sym);
+    }
+  }
+
+  return { removed: true, cleanedImports };
+}
+
 export function removeTaggedBlocksMatching(
   filePath: string,
   tag: string,

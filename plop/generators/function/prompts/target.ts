@@ -5,15 +5,8 @@ export default function targetPrompt(_plop: NodePlopAPI): PromptQuestion {
   return {
     type: 'list',
     name: 'target',
-    message: 'inject into:',
-    choices: [
-      'module',
-      'controller',
-      'service',
-      'provider',
-      'guard',
-      'middleware',
-      'pipe',
-    ],
+    message: 'add function to:',
+    choices: ['service', 'provider', 'guard', 'middleware', 'pipe'],
+    default: 'service',
   };
 }
