@@ -17,6 +17,7 @@ import addUpdateResponse from './add-update-response';
 import addDeleteResponse from './add-delete-response';
 import appendAppImport from './append-app-import';
 import appendAppModule from './append-app-module';
+import addDto from './add-dto';
 
 export default function actions(plop: NodePlopAPI): ActionType[] {
   return [
@@ -27,6 +28,7 @@ export default function actions(plop: NodePlopAPI): ActionType[] {
     addControllerSpec(plop),
     addCreateDto(plop),
     addUpdateDto(plop),
+    addDto(plop),
     addEntity(plop),
     addDomain(plop),
     addRepository(plop),

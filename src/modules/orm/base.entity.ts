@@ -1,19 +1,28 @@
 import { defineEntity, p } from '@mikro-orm/core';
-import { ApiProperty } from '@nestjs/swagger';
 import { v7 } from 'uuid';
+import { ApiProperty } from '../../common/decorators/api-property.decorator';
 // import { PrimaryKey, Property } from '@mikro-orm/decorators/legacy';
 // import { ApiProperty } from '@nestjs/swagger';
 export class Base {
-  @ApiProperty()
+  @ApiProperty({
+    name: 'id',
+    type: 'uuid',
+    addValidator: true,
+    uuidVersion: '7',
+  })
   id!: string;
 
   @ApiProperty({
     name: 'created_at',
+    type: 'datetime',
+    addValidator: true,
   })
   createdAt?: Date;
 
   @ApiProperty({
     name: 'updated_at',
+    type: 'datetime',
+    addValidator: true,
   })
   updatedAt?: Date;
 }

@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 // </import>
 // <import name="{{pascalCase name}}">
-import { {{pascalCase name}} } from './domains/{{kebabCase name}}';
+import { {{pascalCase name}}Entity } from './entities/{{kebabCase name}}.entity';
 // </import>
 // <import name="{{pascalCase name}}Service">
 import { {{pascalCase name}}Service } from './services/{{kebabCase name}}.service';
@@ -19,8 +19,8 @@ import { {{pascalCase name}}Controller } from './controllers/{{kebabCase name}}.
     // <dependency name="MikroOrmModule">
     MikroOrmModule.forFeature([
       // <entities>
-      // <entity name="{{pascalCase name}}">
-      {{pascalCase name}}
+      // <entity name="{{pascalCase name}}Entity">
+      {{pascalCase name}}Entity,
       // </entity>
       // </entities>
     ]),

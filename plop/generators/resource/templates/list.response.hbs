@@ -1,16 +1,25 @@
+
 import { ApiProperty } from '@nestjs/swagger';
 import { OkResponse } from '../../../common/responses/ok.response';
 import { {{pascalCase name}} } from '../domains/{{kebabCase name}}';
 
-export type List{{pascalCase name}}Data = {{pascalCase name}};
-export class List{{pascalCase name}}Response extends OkResponse {
+export class List{{pascalCase name}}Data {
   @ApiProperty({
-    type: () => {{pascalCase name}},
+    type: {{pascalCase name}},
     isArray: true,
   })
-  data!: List{{pascalCase name}}Data[];
-  constructor(data: List{{pascalCase name}}Data[]) {
+  items!: {{pascalCase name}}[];
+  constructor(items: {{pascalCase name}}[]) {
+    this.items = items;
+  }
+}
+export class List{{pascalCase name}}Response extends OkResponse {
+  @ApiProperty({
+    type: List{{pascalCase name}}Data,
+  })
+  data!: List{{pascalCase name}}Data;
+  constructor(items: {{pascalCase name}}[]) {
     super();
-    this.data = data;
+    this.data = new List{{pascalCase name}}Data(items);
   }
 }
