@@ -23,6 +23,9 @@ import { LoggerModule } from 'nestjs-pino';
 // <import name="MikroOrmModule">
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 // </import>
+// <import name="S3Module">
+import { S3Module } from 'nestjs-s3';
+// </import>
 // <import name="configModuleOptions">
 import { configModuleOptions } from '../config/config-module-options';
 // </import>
@@ -43,6 +46,9 @@ import { bullmqModuleOptions } from '../bullmq/bullmq-module-options';
 // </import>
 // <import name="ormModuleConfig">
 import { ormModuleConfig } from '../orm/orm-module-config';
+// </import>
+// <import name="s3ModuleOptions">
+import { s3ModuleOptions } from '../s3/s3-module-options';
 // </import>
 // <import name="RedisModule">
 import { RedisModule } from '../redis/redis.module';
@@ -78,6 +84,9 @@ import { HealthModule } from '../health/health.module';
     // </dependency>
     // <dependency name="MikroOrmModule">
     MikroOrmModule.forRootAsync(ormModuleConfig),
+    // </dependency>
+    // <dependency name="S3Module">
+    S3Module.forRootAsync(s3ModuleOptions),
     // </dependency>
     // <dependency name="RedisModule">
     RedisModule,

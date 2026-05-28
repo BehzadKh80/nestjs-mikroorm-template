@@ -21,6 +21,9 @@ import { REDIS_CONFIG_PROVIDER } from './resources/redis-resource';
 // <import name="SecurityConfig">
 import { SECURITY_CONFIG_PROVIDER } from './resources/security-resource';
 // </import>
+// <import name="S3Config">
+import { S3_CONFIG_PROVIDER } from './resources/s3-resource';
+// </import>
 // </imports>
 export const configModuleOptions: ConfigModuleOptions = {
   isGlobal: true,
@@ -46,6 +49,9 @@ export const configModuleOptions: ConfigModuleOptions = {
     // </provider>
     // <provider name="SwaggerConfig">
     SWAGGER_CONFIG_PROVIDER,
+    // </provider>
+    // <provider name="S3Config">
+    S3_CONFIG_PROVIDER,
     // </provider>
     // </providers>
   ],
