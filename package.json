@@ -27,7 +27,7 @@
     "dep:upi": "ncu --target minor -u && npm install"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1054.0",
+    "@aws-sdk/client-s3": "^3.1055.0",
     "@mikro-orm/core": "^7.1.1",
     "@mikro-orm/migrations": "^7.1.1",
     "@mikro-orm/nestjs": "^7.0.2",
