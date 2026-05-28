@@ -1,10 +1,13 @@
 export const TEMPLATE_DIR = 'plop/generators/dependency/templates';
 
 export const TARGET_FILE =
-  "src/modules/{{kebabCase moduleName}}/" +
+  'src/modules/{{kebabCase moduleName}}/' +
   "{{#if (eq target 'controller')}}controllers/{{kebabCase targetName}}.controller{{/if}}" +
   "{{#if (eq target 'service')}}services/{{kebabCase targetName}}.service{{/if}}" +
   "{{#if (eq target 'provider')}}providers/{{kebabCase targetName}}{{/if}}" +
+  "{{#if (eq target 'guard')}}guards/{{kebabCase targetName}}.guard{{/if}}" +
+  "{{#if (eq target 'middleware')}}middlewares/{{kebabCase targetName}}.middleware{{/if}}" +
+  "{{#if (eq target 'pipe')}}pipes/{{kebabCase targetName}}.pipe{{/if}}" +
   '.ts';
 
 export const MODULE_FILE =

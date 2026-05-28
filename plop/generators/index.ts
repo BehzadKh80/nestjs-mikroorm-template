@@ -9,6 +9,18 @@ import providerGenerator from './provider';
 import rmProviderGenerator from './rm-provider';
 import guardGenerator from './guard';
 import rmGuardGenerator from './rm-guard';
+import middlewareGenerator from './middleware';
+import rmMiddlewareGenerator from './rm-middleware';
+import pipeGenerator from './pipe';
+import rmPipeGenerator from './rm-pipe';
+import routeGenerator from './route';
+import rmRouteGenerator from './rm-route';
+import functionGenerator from './function';
+import rmFunctionGenerator from './rm-function';
+import dtoGenerator from './dto';
+import rmDtoGenerator from './rm-dto';
+import dtoPropertyGenerator from './dto-property';
+import rmDtoPropertyGenerator from './rm-dto-property';
 import resourceGenerator from './resource';
 import propertyGenerator from './property';
 import rmPropertyGenerator from './rm-property';
@@ -29,6 +41,18 @@ const generators: ((plop: NodePlopAPI) => void)[] = [
   rmProviderGenerator,
   guardGenerator,
   rmGuardGenerator,
+  middlewareGenerator,
+  rmMiddlewareGenerator,
+  pipeGenerator,
+  rmPipeGenerator,
+  routeGenerator,
+  rmRouteGenerator,
+  functionGenerator,
+  rmFunctionGenerator,
+  dtoGenerator,
+  rmDtoGenerator,
+  dtoPropertyGenerator,
+  rmDtoPropertyGenerator,
   dependencyGenerator,
   renameGenerator,
 ];

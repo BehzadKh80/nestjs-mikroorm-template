@@ -2,6 +2,9 @@ import type { NodePlopAPI } from 'plop';
 import { PromptQuestion } from '../../types/prompt-question';
 import {
   listControllers,
+  listGuards,
+  listMiddlewares,
+  listPipes,
   listProviders,
   listServices,
 } from '../../../utils/functions';
@@ -17,10 +20,22 @@ export default function targetNamePrompt(plop: NodePlopAPI): PromptQuestion {
         '{{kebabCase moduleName}}',
         answers,
       );
-      if (answers.target === 'controller') return listControllers(moduleName);
-      if (answers.target === 'service') return listServices(moduleName);
-      if (answers.target === 'provider') return listProviders(moduleName);
-      return [];
+      switch (answers.target) {
+        case 'controller':
+          return listControllers(moduleName);
+        case 'service':
+          return listServices(moduleName);
+        case 'provider':
+          return listProviders(moduleName);
+        case 'guard':
+          return listGuards(moduleName);
+        case 'middleware':
+          return listMiddlewares(moduleName);
+        case 'pipe':
+          return listPipes(moduleName);
+        default:
+          return [];
+      }
     },
   };
 }

@@ -1,0 +1,21 @@
+// <imports>
+// <import name="PipeTransform">
+import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+// </import>
+// </imports>
+
+@Injectable()
+export class {{pascalCase name}}Pipe implements PipeTransform {
+  constructor(
+    // <properties>
+    // </properties>
+  ) {}
+
+  transform(value: unknown, metadata: ArgumentMetadata): unknown {
+    void metadata;
+    return value;
+  }
+
+  // <functions>
+  // </functions>
+}
