@@ -9,5 +9,6 @@ export default function addValidatorPrompt(
     name: 'addValidator',
     message: 'setup validator:',
     default: true,
+    when: (answers) => answers.type !== 'relation',
   };
 }

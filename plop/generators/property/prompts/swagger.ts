@@ -7,5 +7,6 @@ export default function swaggerPrompt(_plop: NodePlopAPI): PromptQuestion {
     name: 'swagger',
     message: 'should be add to swagger:',
     default: true,
+    when: (answers) => answers.type !== 'relation',
   };
 }

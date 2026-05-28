@@ -7,5 +7,6 @@ export default function arrayPrompt(_plop: NodePlopAPI): PromptQuestion {
     name: 'array',
     message: 'should be array:',
     default: false,
+    when: (answers) => answers.type !== 'relation',
   };
 }

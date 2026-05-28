@@ -8,6 +8,7 @@ export default function lazyPrompt(_plop: NodePlopAPI): PromptQuestion {
     message: 'should be lazy loading:',
     default: false,
     when: (answers) => {
+      if (answers.type === 'relation') return false;
       if (answers.skipDb) {
         return false;
       }

@@ -1,4 +1,20 @@
     // <property name="{{camelCase name}}">
+{{#if (isRelation type)}}
+    {{camelCase name}}: p
+    .{{relationKind}}(() => {{pascalCase targetEntity}})
+    {{#if mappedBy}}
+    .mappedBy('{{mappedBy}}')
+    {{/if}}
+    {{#if inversedBy}}
+    .inversedBy('{{inversedBy}}')
+    {{/if}}
+    {{#if relationOwner}}
+    .owner()
+    {{/if}}
+    {{#if nullable}}
+    .nullable()
+    {{/if}},
+{{else}}
     {{camelCase name}}: p
     {{#if (eq type 'enum')}}
     .string()
@@ -30,4 +46,5 @@
         {{#if (isDbStringType type)}}"{{/if}}{{default}}{{#if (isDbStringType type)}}"{{/if}}
     )
     {{/if}},
+{{/if}}
     // </property>
