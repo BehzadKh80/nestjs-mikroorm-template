@@ -9,6 +9,10 @@ export default function removeBlockAction(plop: NodePlopAPI) {
     const filePath = resolve(renderedPath);
     const tag = plop.renderString(data.tag, answers);
     const name = plop.renderString(data.name, answers);
+    const commentPrefix = plop.renderString(
+      data.commentPrefix ?? '//',
+      answers,
+    );
 
     if (!tag) throw new Error('removeBlock: `tag` is required');
     if (!name) throw new Error('removeBlock: `name` is required');
@@ -17,9 +21,13 @@ export default function removeBlockAction(plop: NodePlopAPI) {
 
     const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const escapedPrefix = commentPrefix.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      '\\$&',
+    );
 
     const pattern = new RegExp(
-      `[ \\t]*\\/\\/ <${escapedTag} name="${escapedName}">[\\s\\S]*?[ \\t]*\\/\\/ <\\/${escapedTag}>\\n?`,
+      `[ \\t]*${escapedPrefix} <${escapedTag} name="${escapedName}">[\\s\\S]*?[ \\t]*${escapedPrefix} <\\/${escapedTag}>\\n?`,
     );
 
     const content = readFileSync(filePath, 'utf8');

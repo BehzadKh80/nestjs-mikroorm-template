@@ -9,6 +9,7 @@ import isNumberType from './is-number-type';
 import isIntegerType from './is-integer-type';
 import format2Swagger from './format-to-swagger';
 import isSelectableFormat from './is-selectable-format';
+import quoteList from './quote-list';
 import operators from './operators';
 
 const helpers: ((plop: NodePlopAPI) => void)[] = [
@@ -18,6 +19,7 @@ const helpers: ((plop: NodePlopAPI) => void)[] = [
   isDbStringType,
   isDbLength,
   dbType2Ts,
+  quoteList,
   ...operators,
   isIntegerType,
   isStringType,

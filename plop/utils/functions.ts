@@ -178,6 +178,31 @@ export function listFunctions(
   return [...names].sort();
 }
 
+const CONFIG_RESOURCES_DIR = 'src/modules/config/resources';
+
+export function listConfigResources(): string[] {
+  if (!existsSync(CONFIG_RESOURCES_DIR)) return [];
+  return readdirSync(CONFIG_RESOURCES_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .filter((name) => name.endsWith('-resource.ts'))
+    .map((name) => name.replace(/-resource\.ts$/, ''))
+    .sort();
+}
+
+export function listConfigProperties(resource: string): string[] {
+  const file = join(CONFIG_RESOURCES_DIR, `${resource}-resource.ts`);
+  if (!existsSync(file)) return [];
+  const content = readFileSync(file, 'utf8');
+  const names = new Set<string>();
+  const pattern = /\/\/ <property name="([^"]+)">/g;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(content)) !== null) {
+    names.add(match[1]);
+  }
+  return [...names].sort();
+}
+
 export function listDtoProperties(module: string, dto: string): string[] {
   const dtoFile = join(MODULES_DIR, module, 'dto', `${dto}.dto.ts`);
   if (!existsSync(dtoFile)) return [];
