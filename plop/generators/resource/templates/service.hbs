@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 // <imports>
 // <import name="EntityManager">
 import { EntityManager } from '@mikro-orm/postgresql';
@@ -16,6 +20,11 @@ import { Create{{pascalCase name}}Dto } from '../dto/create-{{kebabCase name}}.d
 // <import name="Update{{pascalCase name}}Dto">
 import { Update{{pascalCase name}}Dto } from '../dto/update-{{kebabCase name}}.dto';
 // </import>
+{{#if enablePagination}}
+// <import name="PaginationQueryDto">
+import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
+// </import>
+{{/if}}
 {{/if}}
 // <import name="{{pascalCase name}}Repository">
 import { {{pascalCase name}}Repository } from '../repositories/{{kebabCase name}}.repository';
@@ -61,6 +70,39 @@ export class {{pascalCase name}}Service {
   // </function>
 
   // <function name="findAll">
+  {{#if enablePagination}}
+  async findAll(pagination: PaginationQueryDto): Promise<[{{pascalCase name}}[], number]> {
+    const requestId = this.clsService.get<string>('requestId');
+    this.logger.info({ requestId, pagination }, 'Fetching {{camelCase name}}s');
+
+    const total = await this.{{camelCase name}}Repository.count({});
+    const lastPage = Math.max(1, Math.ceil(total / pagination.perPage));
+
+    if (pagination.page > lastPage) {
+      this.logger.warn(
+        { requestId, page: pagination.page, lastPage },
+        '{{pascalCase name}}s page out of range',
+      );
+      throw new BadRequestException(
+        `Page ${pagination.page} is out of range; last page is ${lastPage}`,
+      );
+    }
+
+    if (total === 0) {
+      this.logger.info({ requestId, total: 0 }, 'No {{camelCase name}}s to fetch');
+      return [[], 0];
+    }
+
+    const offset = (pagination.page - 1) * pagination.perPage;
+    const {{camelCase name}}s = await this.{{camelCase name}}Repository.findAll({
+      offset,
+      limit: pagination.perPage,
+    });
+
+    this.logger.info({ requestId, count: {{camelCase name}}s.length, total }, '{{pascalCase name}}s fetched successfully');
+    return [{{camelCase name}}s, total];
+  }
+  {{else}}
   async findAll(): Promise<{{pascalCase name}}[]> {
     const requestId = this.clsService.get<string>('requestId');
     this.logger.info({ requestId }, 'Fetching all {{camelCase name}}s');
@@ -70,8 +112,9 @@ export class {{pascalCase name}}Service {
     this.logger.info({ requestId, count: {{camelCase name}}s.length }, '{{pascalCase name}}s fetched successfully');
     return {{camelCase name}}s;
   }
+  {{/if}}
   // </function>
-  
+
   // <function name="findOne">
   async findOne(id: string): Promise<{{pascalCase name}}> {
     const requestId = this.clsService.get<string>('requestId');
@@ -88,7 +131,7 @@ export class {{pascalCase name}}Service {
     return {{camelCase name}};
   }
   // </function>
-  
+
   // <function name="update">
   async update(id: string, update{{pascalCase name}}Dto: Update{{pascalCase name}}Dto): Promise<{{pascalCase name}}> {
     const requestId = this.clsService.get<string>('requestId');
@@ -102,7 +145,7 @@ export class {{pascalCase name}}Service {
     return {{camelCase name}};
   }
   // </function>
-  
+
   // <function name="remove">
   async remove(id: string): Promise<void> {
     const requestId = this.clsService.get<string>('requestId');

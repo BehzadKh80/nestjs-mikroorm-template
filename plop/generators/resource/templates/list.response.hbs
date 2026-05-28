@@ -1,6 +1,9 @@
 
 import { ApiProperty } from '@nestjs/swagger';
 import { OkResponse } from '../../../common/responses/ok.response';
+{{#if enablePagination}}
+import { PaginationMeta } from '../../../common/responses/pagination-meta';
+{{/if}}
 import { {{pascalCase name}} } from '../domains/{{kebabCase name}}';
 
 export class List{{pascalCase name}}Data {
@@ -9,17 +12,37 @@ export class List{{pascalCase name}}Data {
     isArray: true,
   })
   items!: {{pascalCase name}}[];
+
   constructor(items: {{pascalCase name}}[]) {
     this.items = items;
   }
 }
+
 export class List{{pascalCase name}}Response extends OkResponse {
   @ApiProperty({
     type: List{{pascalCase name}}Data,
   })
   data!: List{{pascalCase name}}Data;
+{{#if enablePagination}}
+
+  @ApiProperty({
+    type: PaginationMeta,
+  })
+  meta!: PaginationMeta;
+
+  constructor(
+    items: {{pascalCase name}}[],
+    total: number,
+    pagination: { page: number; perPage: number },
+  ) {
+    super();
+    this.data = new List{{pascalCase name}}Data(items);
+    this.meta = new PaginationMeta(total, pagination.page, pagination.perPage);
+  }
+{{else}}
   constructor(items: {{pascalCase name}}[]) {
     super();
     this.data = new List{{pascalCase name}}Data(items);
   }
+{{/if}}
 }

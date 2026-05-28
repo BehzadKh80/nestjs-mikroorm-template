@@ -7,6 +7,9 @@ import {
   Patch,
   Param,
   Delete,
+  {{#if enablePagination}}
+  Query,
+  {{/if}}
   {{/if}}
 } from '@nestjs/common';
 import {
@@ -20,6 +23,9 @@ import { {{pascalCase name}}Service } from '../services/{{kebabCase name}}.servi
 import { Create{{pascalCase name}}Dto } from '../dto/create-{{kebabCase name}}.dto';
 import { Update{{pascalCase name}}Dto } from '../dto/update-{{kebabCase name}}.dto';
 import { {{pascalCase name}}Dto } from '../dto/{{kebabCase name}}.dto';
+{{#if enablePagination}}
+import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
+{{/if}}
 import { Create{{pascalCase name}}Response } from '../responses/create-{{kebabCase name}}.response';
 
 import { List{{pascalCase name}}Response } from '../responses/list-{{kebabCase name}}.response';
@@ -40,7 +46,7 @@ export class {{pascalCase name}}Controller {
 
   {{#if genCRUD}}
   // <routes>
-  
+
   // <route name="create">
   @ApiCreatedResponse({
     type: Create{{pascalCase name}}Response,
@@ -65,10 +71,20 @@ export class {{pascalCase name}}Controller {
   @Get()
   async findAll(
     // <arguments>
+    {{#if enablePagination}}
+    // <argument name="pagination">
+    @Query() pagination: PaginationQueryDto,
+    // </argument>
+    {{/if}}
     // </arguments>
   ) {
+    {{#if enablePagination}}
+    const [items, total] = await this.{{camelCase name}}Service.findAll(pagination);
+    return new List{{pascalCase name}}Response(items, total, pagination);
+    {{else}}
     const data = await this.{{camelCase name}}Service.findAll();
     return new List{{pascalCase name}}Response(data);
+    {{/if}}
   }
   // </route>
 
@@ -77,7 +93,13 @@ export class {{pascalCase name}}Controller {
     type: Detail{{pascalCase name}}Response,
   })
   @Get(':id')
-  async findOne(@Param() params: {{pascalCase name}}Dto) {
+  async findOne(
+    // <arguments>
+    // <argument name="params">
+    @Param() params: {{pascalCase name}}Dto
+    // </argument>
+    // </arguments>
+  ) {
     const data = await this.{{camelCase name}}Service.findOne(params.id);
     return new Detail{{pascalCase name}}Response(data);
   }

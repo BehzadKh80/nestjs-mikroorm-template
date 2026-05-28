@@ -32,7 +32,7 @@ import { getLoggerToken } from 'nestjs-pino';
 import { ClsService } from 'nestjs-cls';
 // </import>
 // <import name="NotFoundException">
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 // </import>
 // <import name="{{pascalCase name}}Service">
 import { {{pascalCase name}}Service } from './{{kebabCase name}}.service';
@@ -174,6 +174,54 @@ describe('{{pascalCase name}}Service', () => {
 
   // <function name="findAll">
   describe('findAll', () => {
+    {{#if enablePagination}}
+    it('returns an empty list and zero total when there are no records', async () => {
+      const [items, total] = await service.findAll({ page: 1, perPage: 20 });
+      expect(items).toEqual([]);
+      expect(total).toBe(0);
+    });
+
+    it('returns every persisted {{camelCase name}} with its total count', async () => {
+      await service.create(buildCreateDto() as never);
+      await service.create(buildCreateDto() as never);
+
+      const [items, total] = await service.findAll({ page: 1, perPage: 20 });
+      expect(items).toHaveLength(2);
+      expect(total).toBe(2);
+    });
+
+    it('honours offset/limit via page + perPage', async () => {
+      await service.create(buildCreateDto() as never);
+      await service.create(buildCreateDto() as never);
+      await service.create(buildCreateDto() as never);
+
+      const [items, total] = await service.findAll({ page: 2, perPage: 2 });
+      expect(items).toHaveLength(1);
+      expect(total).toBe(3);
+    });
+
+    it('throws BadRequestException when page exceeds last page', async () => {
+      await service.create(buildCreateDto() as never);
+      await service.create(buildCreateDto() as never);
+
+      await expect(
+        service.findAll({ page: 5, perPage: 2 }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+    });
+
+    it('skips the fetch query when total is zero', async () => {
+      const repository = (service as never as {
+        {{camelCase name}}Repository: {{pascalCase name}}Repository;
+      }).{{camelCase name}}Repository;
+      const findAllSpy = vi.spyOn(repository, 'findAll');
+
+      const [items, total] = await service.findAll({ page: 1, perPage: 20 });
+
+      expect(items).toEqual([]);
+      expect(total).toBe(0);
+      expect(findAllSpy).not.toHaveBeenCalled();
+    });
+    {{else}}
     it('returns an empty array when there are no records', async () => {
       const result = await service.findAll();
       expect(result).toEqual([]);
@@ -186,6 +234,7 @@ describe('{{pascalCase name}}Service', () => {
       const result = await service.findAll();
       expect(result).toHaveLength(2);
     });
+    {{/if}}
   });
   // </function>
 

@@ -136,7 +136,7 @@ export const ormModuleConfig: MikroOrmModuleAsyncOptions = {
         schema: databaseConfig.schema,
         nodeEnv: nodeConfig.env,
       }),
-      autoLoadEntities: true,
+      // autoLoadEntities: true,
       allowGlobalContext: process.env['ORM_GLOBAL_CONTEXT'] === 'true',
     };
   },
