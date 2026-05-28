@@ -26,6 +26,10 @@ import propertyGenerator from './property';
 import rmPropertyGenerator from './rm-property';
 import dependencyGenerator from './dependency';
 import renameGenerator from './rename';
+import configGenerator from './config';
+import configPropertyGenerator from './config-property';
+import rmConfigGenerator from './rm-config';
+import rmConfigPropertyGenerator from './rm-config-property';
 
 const generators: ((plop: NodePlopAPI) => void)[] = [
   resourceGenerator,
@@ -53,6 +57,10 @@ const generators: ((plop: NodePlopAPI) => void)[] = [
   rmDtoGenerator,
   dtoPropertyGenerator,
   rmDtoPropertyGenerator,
+  configGenerator,
+  configPropertyGenerator,
+  rmConfigGenerator,
+  rmConfigPropertyGenerator,
   dependencyGenerator,
   renameGenerator,
 ];

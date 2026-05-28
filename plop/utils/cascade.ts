@@ -53,6 +53,17 @@ export function cascadeInjection(
   return report;
 }
 
+export function scanConfigProviderReferences(
+  providerSymbol: string,
+  excludeFiles: string[] = [],
+): string[] {
+  const excluded = new Set(excludeFiles.map((f) => resolve(f)));
+  return walkTs(SEARCH_ROOT).filter((f) => {
+    if (excluded.has(resolve(f))) return false;
+    return fileImportsSymbol(f, providerSymbol);
+  });
+}
+
 function findModuleDependents(
   moduleClassName: string,
   excludeFiles: string[] = [],

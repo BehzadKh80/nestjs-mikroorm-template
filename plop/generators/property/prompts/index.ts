@@ -7,6 +7,13 @@ import namePrompt from './name';
 import typePrompt from './type';
 import enumNamePrompt from './enum-name';
 import enumPathPrompt from './enum-path';
+import relationKindPrompt from './relation-kind';
+import targetEntityPrompt from './target-entity';
+import targetEntityPathPrompt from './target-entity-path';
+import targetEntityPathManualPrompt from './target-entity-path-manual';
+import relationOwnerPrompt from './relation-owner';
+import mappedByPrompt from './mapped-by';
+import inversedByPrompt from './inversed-by';
 import nullablePrompt from './nullable';
 import arrayPrompt from './array';
 import skipDbPrompt from './skip-db';
@@ -37,6 +44,13 @@ export default function prompts(plop: NodePlopAPI): PromptQuestion[] {
     typePrompt(plop),
     enumNamePrompt(plop),
     enumPathPrompt(plop),
+    relationKindPrompt(plop),
+    targetEntityPrompt(plop),
+    targetEntityPathPrompt(plop),
+    targetEntityPathManualPrompt(plop),
+    relationOwnerPrompt(plop),
+    mappedByPrompt(plop),
+    inversedByPrompt(plop),
     nullablePrompt(plop),
     arrayPrompt(plop),
     skipDbPrompt(plop),

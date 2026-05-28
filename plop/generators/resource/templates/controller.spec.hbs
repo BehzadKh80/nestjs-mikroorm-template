@@ -112,6 +112,40 @@ describe('{{pascalCase name}}Controller', () => {
 
   // <route name="findAll">
   describe('findAll', () => {
+    {{#if enablePagination}}
+    it('delegates to {{pascalCase name}}Service.findAll and wraps the page', async () => {
+      const entities = [
+        build{{pascalCase name}}('a'),
+        build{{pascalCase name}}('b'),
+      ];
+      const pagination = { page: 1, perPage: 20 };
+      service.findAll!.mockResolvedValue([entities, 2]);
+
+      const response = await controller.findAll(pagination as never);
+
+      expect(service.findAll).toHaveBeenCalledExactlyOnceWith(pagination);
+      expect(response).toBeInstanceOf(List{{pascalCase name}}Response);
+      expect(response.data.items).toBe(entities);
+      expect(response.meta.total).toBe(2);
+      expect(response.meta.currentPage).toBe(1);
+      expect(response.meta.perPage).toBe(20);
+      expect(response.meta.firstPage).toBe(1);
+      expect(response.meta.lastPage).toBe(1);
+    });
+
+    it('returns an empty page when the service returns nothing', async () => {
+      const pagination = { page: 1, perPage: 20 };
+      service.findAll!.mockResolvedValue([[], 0]);
+
+      const response = await controller.findAll(pagination as never);
+
+      expect(response).toBeInstanceOf(List{{pascalCase name}}Response);
+      expect(response.data.items).toEqual([]);
+      expect(response.meta.total).toBe(0);
+      expect(response.meta.firstPage).toBe(1);
+      expect(response.meta.lastPage).toBe(1);
+    });
+    {{else}}
     it('delegates to {{pascalCase name}}Service.findAll and wraps the list', async () => {
       const entities = [
         build{{pascalCase name}}('a'),
@@ -123,7 +157,7 @@ describe('{{pascalCase name}}Controller', () => {
 
       expect(service.findAll).toHaveBeenCalledExactlyOnceWith();
       expect(response).toBeInstanceOf(List{{pascalCase name}}Response);
-      expect(response.data).toBe(entities);
+      expect(response.data.items).toBe(entities);
     });
 
     it('returns an empty list when the service returns nothing', async () => {
@@ -132,8 +166,9 @@ describe('{{pascalCase name}}Controller', () => {
       const response = await controller.findAll();
 
       expect(response).toBeInstanceOf(List{{pascalCase name}}Response);
-      expect(response.data).toEqual([]);
+      expect(response.data.items).toEqual([]);
     });
+    {{/if}}
   });
   // </route>
 

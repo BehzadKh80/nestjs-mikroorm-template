@@ -1,0 +1,16 @@
+import { ConfigType } from '@nestjs/config';
+import { createValidatedConfig } from '../../../common/helper/functions';
+
+export class {{pascalCase name}}Config {
+  // <properties>
+  // </properties>
+}
+
+export const {{constantCase name}}_CONFIG_PROVIDER = createValidatedConfig(
+  '{{camelCase name}}',
+  {{pascalCase name}}Config,
+);
+
+export type {{pascalCase name}}ConfigType = ConfigType<
+  typeof {{constantCase name}}_CONFIG_PROVIDER
+>;

@@ -7,6 +7,7 @@ export default function lengthPrompt(_plop: NodePlopAPI): PromptQuestion {
     name: 'length',
     message: 'property length:',
     when: (answers) => {
+      if (answers.type === 'relation') return false;
       if (answers.skipDb) {
         return false;
       }

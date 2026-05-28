@@ -1,4 +1,7 @@
   // <property name="{{camelCase name}}">
+{{#if (isRelation type)}}
+  {{camelCase name}}{{#if nullable}}?{{else}}!{{/if}}: {{#if (isCollectionRelation relationKind)}}Collection<{{pascalCase targetEntity}}>{{else}}{{pascalCase targetEntity}}{{/if}};
+{{else}}
   @ApiProperty({
     name: '{{camelCase name}}',
     type: '{{type}}',
@@ -49,4 +52,5 @@
     {{/if}}
   })
   {{camelCase name}}{{#if nullable}}?{{else}}!{{/if}}: {{#if (eq type 'enum')}}{{pascalCase enumName}}{{else}}{{dbType2Ts type}}{{/if}}{{#if array}}[]{{/if}};
+{{/if}}
   // </property>

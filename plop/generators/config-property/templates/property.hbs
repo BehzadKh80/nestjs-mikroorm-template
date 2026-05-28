@@ -1,0 +1,23 @@
+  // <property name="{{camelCase name}}">
+  @Expose({ name: '{{constantCase resourceName}}__{{constantCase name}}' })
+{{#if (eq type 'string')}}
+  @Transform(({ value }) => value ?? '{{defaultValue}}')
+  @IsString()
+{{/if}}
+{{#if (eq type 'number')}}
+  @Transform(({ value }) => value ?? {{#if defaultValue}}{{defaultValue}}{{else}}0{{/if}})
+  @IsNumber()
+{{/if}}
+{{#if (eq type 'boolean')}}
+  @Transform(({ value }) => value ?? {{#if defaultValue}}{{defaultValue}}{{else}}false{{/if}})
+  @IsBoolean()
+{{/if}}
+{{#if (eq type 'url')}}
+  @IsUrl({ protocols: [{{{quoteList urlProtocols}}}] })
+{{/if}}
+{{#if (eq type 'enum')}}
+  @Transform(({ value }): any => value)
+  @IsEnum({{pascalCase enumName}})
+{{/if}}
+  {{camelCase name}}!: {{#if (eq type 'enum')}}{{pascalCase enumName}}{{else}}{{#if (eq type 'url')}}string{{else}}{{type}}{{/if}}{{/if}};
+  // </property>
